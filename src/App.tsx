@@ -25,6 +25,7 @@ import ToastProvider from "./components/common/ToastProvider/ToastProvider";
 import VotesPage from "./pages/Votes/VotesPage";
 import AdminImagesPage from "./pages/AdminImages/AdminImagesPage";
 import CreateAdminImagePage from "./pages/AdminImages/CreateAdminImagePage";
+import DeletedImagesPage from "./pages/AdminImages/DeletedImagesPage";
 import UsersPage from "./pages/users/UsersPage";
 import SubAdminsPage from "./pages/SubAdmins/SubAdminsPage";
 import CreateSubAdminPage from "./pages/SubAdmins/CreateSubAdminPage";
@@ -80,6 +81,7 @@ export default function App() {
             <Route path="votes" element={<VotesPage />} />
             <Route path="admin-images" element={<AdminImagesPage />} />
             <Route path="admin-images/create" element={<CreateAdminImagePage />} />
+            <Route path="admin-images/deleted" element={<DeletedImagesPage />} />
             <Route path="users" element={<UsersPage />} />
             <Route path="subadmins" element={<SubAdminsPage />} />
             <Route path="subadmins/create" element={<CreateSubAdminPage />} />

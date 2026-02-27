@@ -26,7 +26,7 @@ import {
   FiFlag,
   FiCreditCard,
 } from "react-icons/fi";
-import { Filter } from "lucide-react";
+import { Filter, History as HistoryIcon } from "lucide-react";
 
 // Mock components for demonstration
 const ChevronDownIcon = ({ className }: { className?: string }) => (
@@ -184,6 +184,11 @@ const AppSidebar: React.FC = () => {
       icon: <FiImage className="w-5 h-5" />,
       name: t("adminImages.title"),
       path: "/admin-images",
+    },
+    {
+      icon: <HistoryIcon className="w-5 h-5" />,
+      name: t("sidebar.deletedImages"),
+      path: "/admin-images/deleted",
     },
     {
       icon: <FiUsers className="w-5 h-5" />,
@@ -490,7 +495,7 @@ const AppSidebar: React.FC = () => {
       onMouseEnter={() => !isExpanded && setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <div
+<div
         className={`py-6 flex ${
           !isExpanded && !isHovered
             ? "lg:justify-center"
@@ -498,16 +503,13 @@ const AppSidebar: React.FC = () => {
         }`}
       >
         <Link to="/dashboard" className="group">
-          <div className="w-24 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center text-white font-bold shadow-lg shadow-blue-500/30 group-hover:shadow-xl group-hover:shadow-blue-500/40 transition-all duration-200">
-            <img
+             <img
               src="/logo.png"
               alt="Logo Text"
-              className="h-9 w-auto object-contain"
+              className="h-22   w-36 object-contain"
             />{" "}
-          </div>
-        </Link>
-      </div>
-
+         </Link>
+      </div>  
       {/* Custom Scrollbar Styles */}
       <style>{`
         .custom-scrollbar::-webkit-scrollbar {

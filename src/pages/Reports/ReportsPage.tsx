@@ -36,6 +36,7 @@ interface Report {
     id: number;
     url: string;
     userId: number;
+    deletedAt: string | null;
   };
 }
 
@@ -349,7 +350,7 @@ export default function ReportsPage() {
                             onClick={() => setSelectedReport(report)}
                           >
                             <img
-                              src={getImageUrl(report.image.url)}
+                      src={report.image?.deletedAt ? "default/placeholder-brand.png" : getImageUrl(report.image.url)}
                               alt="Reported content"
                               className="w-full h-full object-cover"
                             />
@@ -382,13 +383,13 @@ export default function ReportsPage() {
                             >
                               <Eye size={18} />
                             </button>
-                            <button
+                           {!report.image?.deletedAt && (<button
                               onClick={() => handleDeleteImage(report.image.id)}
                               className="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-rose-600 hover:text-white transition-all transform active:scale-95 shadow-sm"
                               title={t("reports.deleteImage.title") || "Delete Image"}
                             >
                               <ImageIcon size={18} />
-                            </button>
+                            </button>)}
                             <button
                               onClick={() => handleDelete(report)}
                               className="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-rose-600 hover:text-white transition-all transform active:scale-95 shadow-sm"
@@ -492,7 +493,7 @@ export default function ReportsPage() {
                 <div className="relative rounded-2xl overflow-hidden border-4 border-white dark:border-slate-800 shadow-xl bg-slate-100 dark:bg-slate-800">
                   <div className="aspect-video w-full flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-800 dark:to-slate-900">
                     <img
-                      src={getImageUrl(selectedReport.image.url)}
+                      src={selectedReport.deletedAt ? "default/placeholder-brand.png" : getImageUrl(selectedReport.image.url)}
                       alt="Reported content"
                       className="max-w-full max-h-[300px] object-contain transition-transform duration-500 group-hover:scale-105"
                     />
@@ -584,13 +585,13 @@ export default function ReportsPage() {
                   <UserX size={20} />
                   {t("reports.blockUser")}
                 </button>
-                <button
+              {!selectedReport.image?.deletedAt && <button
                   onClick={() => handleDeleteImage(selectedReport.image.id)}
                   className="py-4 bg-orange-500 hover:bg-orange-600 text-white font-black rounded-2xl transition-all active:scale-[0.98] shadow-lg shadow-orange-500/30 flex items-center justify-center gap-2"
                 >
                   <ImageIcon size={20} />
                   {t("reports.deleteImage.title")}
-                </button>
+                </button>}
                 <button
                   onClick={() => handleDelete(selectedReport)}
                   className="py-4 bg-rose-600 hover:bg-rose-700 text-white font-black rounded-2xl transition-all active:scale-[0.98] shadow-lg shadow-rose-600/30 flex items-center justify-center gap-2"
