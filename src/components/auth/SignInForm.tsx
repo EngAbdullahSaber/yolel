@@ -93,7 +93,7 @@ export default function SignInForm() {
     toast.success(message, { duration: 2000 });
 
     // Navigate to dashboard
-    setTimeout(() => navigate("/dashboard"), 1500);
+    setTimeout(() => navigate("/votes"), 1500);
   };
 
   const handleLoginError = (error: any) => {

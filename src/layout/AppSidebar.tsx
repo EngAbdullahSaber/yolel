@@ -169,11 +169,11 @@ const AppSidebar: React.FC = () => {
   const location = useLocation();
 
   const navItems: NavItem[] = [
-    {
-      icon: <FiHome className="w-5 h-5" />,
-      name: t("sidebar.dashboard"),
-      path: "/dashboard",
-    },
+    // {
+    //   icon: <FiHome className="w-5 h-5" />,
+    //   name: t("sidebar.dashboard"),
+    //   path: "/dashboard",
+    // },
   
     {
       icon: <FiThumbsUp className="w-5 h-5" />,
