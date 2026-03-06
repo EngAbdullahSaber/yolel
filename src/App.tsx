@@ -37,6 +37,7 @@ import SubscriptionsPage from "./pages/Subscriptions/SubscriptionsPage";
 import PromoCodesPage from "./pages/PromoCodes/PromoCodesPage";
 import CreatePromoCodePage from "./pages/PromoCodes/CreatePromoCodePage";
 import UpdatePromoCodePage from "./pages/PromoCodes/UpdatePromoCodePage";
+import AppealsPage from "./pages/Appeals/AppealsPage";
 
 export default function App() {
   useLanguage();
@@ -93,6 +94,8 @@ export default function App() {
             <Route path="promo-codes" element={<PromoCodesPage />} />
             <Route path="promo-codes/create" element={<CreatePromoCodePage />} />
             <Route path="promo-codes/edit/:id" element={<UpdatePromoCodePage />} />
+            <Route path="appeals" element={<AppealsPage />} />
+
         
             <Route path="alerts" element={<Alerts />} />
             <Route path="avatars" element={<Avatars />} />
