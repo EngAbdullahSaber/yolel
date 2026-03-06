@@ -23,6 +23,7 @@ import {
   Eye,
   Heart,
   Activity,
+  Download,
 } from "lucide-react";
 import { GetPanigationMethod, DeleteMethod } from "../../services/apis/ApiMethod";
 import { useTranslation } from "react-i18next";
@@ -72,6 +73,9 @@ export default function AdminImagesPage() {
   const [imageToDelete, setImageToDelete] = useState<AdminImage | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
 
+  const [genderFilter, setGenderFilter] = useState<string>("");
+  const [ageFilter, setAgeFilter] = useState<string>("");
+
   const formatImageUrl = (url?: string) => {
     if (!url) return "";
     return import.meta.env.VITE_IMAGE_BASE_URL + url;
@@ -80,9 +84,13 @@ export default function AdminImagesPage() {
   const fetchImages = async ({
     page,
     pageSize,
+    gender,
+    age,
   }: {
     page: number;
     pageSize: number;
+    gender?: string;
+    age?: string;
   }): Promise<{
     data: AdminImage[];
     total: number;
@@ -91,12 +99,17 @@ export default function AdminImagesPage() {
     totalPages: number;
   }> => {
     try {
+      const params: any = {};
+      if (gender) params.gender = gender;
+      if (age) params.age = age;
+
       const response = (await GetPanigationMethod(
         "/image/admin",
         page,
         pageSize,
         lang,
-        ""
+        "",
+        params
       )) as AdminImagesResponse;
 
       const items = response.data?.items || [];
@@ -134,11 +147,13 @@ export default function AdminImagesPage() {
     isError,
     refetch,
   } = useQuery({
-    queryKey: ["admin-images", currentPage, rowsPerPage],
+    queryKey: ["admin-images", currentPage, rowsPerPage, genderFilter, ageFilter],
     queryFn: () =>
       fetchImages({
         page: currentPage,
         pageSize: rowsPerPage,
+        gender: genderFilter,
+        age: ageFilter,
       }),
   });
   
@@ -170,6 +185,24 @@ export default function AdminImagesPage() {
       toast.error(error?.response?.data?.message?.english || error.message || t("common.error"));
     } finally {
       setIsDeleting(false);
+    }
+  };
+
+  const handleDownload = async (imageUrl: string, id: number) => {
+    try {
+      const response = await fetch(imageUrl);
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `image-${id}.jpg`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("Download error:", error);
+      toast.error(t("common.error") || "Failed to download image");
     }
   };
 
@@ -226,7 +259,60 @@ export default function AdminImagesPage() {
           </div>
         </div>
 
-     
+        {/* Filters */}
+        <div className="flex flex-wrap items-center gap-6 bg-white dark:bg-slate-800 p-6 rounded-[2rem] shadow-sm border border-slate-100 dark:border-slate-700">
+          {/* Gender Filter */}
+          <div className="flex flex-col gap-2 ring-1 ring-slate-200 dark:ring-slate-700 p-4 rounded-2xl flex-1 min-w-[300px]">
+            <div className="flex items-center gap-2 text-slate-500 dark:text-slate-400 mb-1">
+              <Users size={16} />
+              <span className="text-xs font-black uppercase tracking-wider">{t("adminImages.table.gender")}</span>
+            </div>
+            <div className="flex bg-slate-100 dark:bg-slate-900/50 p-1.5 rounded-xl gap-1">
+              {(["", "male", "female"] as const).map((g) => (
+                <button
+                  key={g}
+                  onClick={() => {
+                    setGenderFilter(g);
+                    setCurrentPage(1);
+                  }}
+                  className={`flex-1 px-4 py-2 rounded-lg text-sm font-bold transition-all duration-300 ${
+                    genderFilter === g
+                      ? "bg-white dark:bg-slate-700 text-blue-600 dark:text-white shadow-md ring-1 ring-slate-200 dark:ring-slate-700/50"
+                      : "text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200"
+                  }`}
+                >
+                  {g === "" ? t("common.all") : t(`adminImages.gender.${g}`)}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Age Filter */}
+          <div className="flex flex-col gap-2 ring-1 ring-slate-200 dark:ring-slate-700 p-4 rounded-2xl flex-[1.5] min-w-[400px]">
+            <div className="flex items-center gap-2 text-slate-500 dark:text-slate-400 mb-1">
+              <Activity size={16} />
+              <span className="text-xs font-black uppercase tracking-wider">{t("adminImages.table.age")}</span>
+            </div>
+            <div className="flex bg-slate-100 dark:bg-slate-900/50 p-1.5 rounded-xl gap-1 overflow-x-auto no-scrollbar">
+              {(["", "child", "youth", "old"] as const).map((a) => (
+                <button
+                  key={a}
+                  onClick={() => {
+                    setAgeFilter(a);
+                    setCurrentPage(1);
+                  }}
+                  className={`flex-1 px-4 py-2 rounded-lg text-sm font-bold transition-all duration-300 min-w-fit ${
+                    ageFilter === a
+                      ? "bg-white dark:bg-slate-700 text-indigo-600 dark:text-white shadow-md ring-1 ring-slate-200 dark:ring-slate-700/50"
+                      : "text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200"
+                  }`}
+                >
+                  {a === "" ? t("common.all") : t(`adminImages.age.${a}`)}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
 
         {/* Loading State */}
         {isLoading && (
@@ -662,6 +748,13 @@ export default function AdminImagesPage() {
                   className="flex-1 py-3 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 font-bold rounded-2xl transition-all"
                 >
                   {t("common.close")}
+                </button>
+                <button
+                  onClick={() => handleDownload(formatImageUrl(selectedImage.url), selectedImage.id)}
+                  className="flex-1 py-3 bg-blue-100 dark:bg-blue-900/40 hover:bg-blue-200 dark:hover:bg-blue-900/60 text-blue-600 dark:text-blue-400 font-bold rounded-2xl transition-all flex items-center justify-center gap-2"
+                >
+                  <Download size={18} />
+                  {t("common.download") || "Download"}
                 </button>
                 <button
                   onClick={() => handleDelete(selectedImage)}

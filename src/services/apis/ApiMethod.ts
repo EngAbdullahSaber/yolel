@@ -4,13 +4,15 @@ export async function GetPanigationMethod(
   url: any,
   page: any,
   pageSize: any,
-  lang: any, // Added missing comma here
-  searchTerm: any
+  lang: any,
+  searchTerm: any,
+  additionalParams?: any
 ) {
   // Build query parameters
   const params = new URLSearchParams({
     page: page.toString(),
     pageSize: pageSize.toString(),
+    ...additionalParams,
   });
 
   // Only add search term if it's provided and not empty

@@ -3,11 +3,20 @@ import { FormField } from "../../components/shared/GenericForm";
 import { z } from "zod";
 import { Tag, Calendar, Percent, Store, Type, ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { CreateMethod } from "../../services/apis/ApiMethod";
+import { CreateMethod, GetPanigationMethod } from "../../services/apis/ApiMethod";
 import { useToast } from "../../hooks/useToast";
-import { useQueryClient } from "@tanstack/react-query";
+import { useQueryClient, useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { CreateForm } from "../../components/shared/GenericForm/CreateForm";
+
+interface Merchant {
+  id: number;
+  name: string;
+}
+
+interface MerchantsResponse {
+  data: Merchant[];
+}
  
 export default function CreatePromoCodePage() {
   const { t, i18n } = useTranslation();
@@ -17,6 +26,14 @@ export default function CreatePromoCodePage() {
   const lang = i18n.language || "en";
 
   const [isLoading, setIsLoading] = useState(false);
+
+  // Fetch merchants for the dropdown
+  const { data: merchantsData } = useQuery<MerchantsResponse>({
+    queryKey: ["merchants-all"],
+    queryFn: () => GetPanigationMethod("user/merchant/all", 1, 1000, lang, ""),
+  });
+
+  const merchants = merchantsData?.data || [];
 
   // Define form fields for creating a promo code
   const promoCodeFields: FormField[] = [
@@ -78,15 +95,19 @@ export default function CreatePromoCodePage() {
       cols: 6,
       validation: z.coerce.number().min(0).max(100),
     },
-    // Merchant Name
+    // Merchant ID
     {
-      name: "merchantName",
+      name: "merchantId",
       label: t("promoCodes.form.merchantName"),
-      type: "text",
+      type: "select",
       placeholder: t("promoCodes.form.merchantNamePlaceholder"),
       required: false,
       icon: <Store size={18} />,
       cols: 6,
+      options: [
+        { label: t("common.all") || "Select Merchant", value: "" },
+        ...merchants.map((m) => ({ label: m.name, value: m.id.toString() }))
+      ],
     },
   ];
 
@@ -96,7 +117,7 @@ export default function CreatePromoCodePage() {
     startDate: "",
     endDate: "",
     discountPercent: 0,
-    merchantName: "",
+    merchantId: "",
   };
 
   const handleSubmit = async (data: any) => {
@@ -117,7 +138,16 @@ export default function CreatePromoCodePage() {
         ...data,
         startDate: new Date(data.startDate).toISOString(),
         endDate: new Date(data.endDate).toISOString(),
+        merchantId: data.merchantId ? Number(data.merchantId) : null,
       };
+      
+      // Remove merchantId if it's null to avoid sending it as null if API doesn't like it
+      if (requestData.merchantId === null) {
+        delete requestData.merchantId;
+      }
+      
+      // The user wants to replace merchantName with merchantId, so we delete merchantName just in case
+      delete requestData.merchantName;
 
       const result = await CreateMethod("promo-code", requestData, lang);
 

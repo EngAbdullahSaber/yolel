@@ -98,7 +98,15 @@
     "no": "No",
     "all": "All",
     "none": "None",
+    "blocked": "Blocked",
+    "unblocked": "Unblocked",
+    "unblock": "Unblock",
+    "block": "Block",
     "select": "Select",
+    "male": "Male",
+    "female": "Female",
+    "total": "Total",
+    "count": "Count",
     "noData": "No data found",
     "noDataYet": "Get started by adding your first item.",
     "searchPlaceholder": "Search anything...",
@@ -115,6 +123,30 @@
     "noOptionsFound": "No options found",
     "scrollToLoadMore": "Scroll to load more...",
     "selectDateRange": "Select Date Range"
+  },
+  "dashboard": {
+    "title": "System Overview",
+    "subtitle": "Real-time system insights and performance metrics",
+    "periods": {
+      "all": "All Time",
+      "lastMonth": "Last Month",
+      "lastWeek": "Last Week"
+    },
+    "stats": {
+      "users": "Total Users",
+      "images": "System Images",
+      "votes": "Total Votes",
+      "reports": "Content Reports",
+      "deleted": "Deleted Content",
+      "subscriptions": "Premium Subs",
+      "promoCodes": "Active Promos"
+    },
+    "charts": {
+      "gender": "Gender Distribution",
+      "age": "Age Demographics",
+      "total": "Total",
+      "count": "Total Count"
+    }
   },
   "sidebar": {
     "dashboard": "Dashboard",
@@ -176,6 +208,53 @@
       "admin": "Admin"
     }
   },
+  "merchants": {
+    "title": "Merchant Management",
+    "subtitle": "Monitor and manage system merchants and store accounts",
+    "createTitle": "Create New Merchant",
+    "updateTitle": "Update Merchant",
+    "fetchingData": "Fetching merchants data...",
+    "page": {
+      "title": "Merchants Management",
+      "description": "Manage and view merchant accounts and information",
+      "back": "Back to Merchants",
+      "refresh": "Refresh",
+      "addMerchant": "Add Merchant",
+      "searchPlaceholder": "Search merchants by name, email, or phone...",
+      "noMerchants": "No merchants found",
+      "noMatch": "No merchants match your search criteria.",
+      "emptyList": "There are no merchants in the database yet.",
+      "addFirstMerchant": "Add Your First Merchant",
+      "loading": "Loading merchants...",
+      "errorTitle": "Failed to load merchants",
+      "errorMessage": "There was an error fetching the merchants data.",
+      "tryAgain": "Try Again",
+      "language": {
+        "ar": "Arabic",
+        "en": "English"
+      }
+    },
+    "table": {
+      "name": "Store Name",
+      "email": "Email",
+      "status": "Status",
+      "blocked": "Blocked"
+    },
+    "create": {
+      "title": "Add New Merchant",
+      "description": "Create a new merchant account with contact information and security settings.",
+      "form": {
+        "submit": "Create Merchant Account",
+        "loading": "Creating Account...",
+        "success": "Merchant account created successfully!",
+        "error": "Failed to create merchant account. Please try again."
+      }
+    },
+    "messages": {
+      "blockSuccess": "Merchant blocked successfully",
+      "unblockSuccess": "Merchant unblocked successfully"
+    }
+  },
   "subAdmins": {
     "title": "SubAdmin Management",
     "subtitle": "Manage sub-administrators and their access",
@@ -226,6 +305,13 @@
   "adminImages": {
     "title": "System Images",
     "subtitle": "Manage and monitor system images and their statistics",
+    "level": {
+      "title": "Image Levels",
+      "subtitle": "Analyze images based on their performance levels",
+      "range": "Percentage Range",
+      "from": "From",
+      "to": "To"
+    },
     "fetchingData": "Fetching images data...",
     "noImagesFound": "No images found",
     "totalItems": "Total Images",
@@ -459,11 +545,12 @@
       "startDate": "Start Date",
       "endDate": "End Date",
       "type": "Type",
+      "usages": "Usages",
       "actions": "Actions"
     },
     "form": {
       "title": "Promo Code Details",
-      "description": "Enter the details for the new promo code",
+      "description": "Enter the details for the promo code",
       "code": "Promo Code",
       "codePlaceholder": "e.g. PARTNER20",
       "startDate": "Start Date",
@@ -471,8 +558,8 @@
       "discountPercent": "Discount Percentage",
       "discountPercentPlaceholder": "0-100",
       "type": "Promo Type",
-      "merchantName": "Merchant Name",
-      "merchantNamePlaceholder": "Optional",
+      "merchantName": "Select Store",
+      "merchantNamePlaceholder": "Choose a merchant store",
       "submit": "Create Promo Code",
       "submitUpdate": "Update Promo Code",
       "creating": "Creating promo code...",
@@ -1292,186 +1379,7 @@
       "description": "Upload a high-quality logo with transparent background. The logo will be displayed in product catalogs and brand pages."
     }
   },
-  "merchants": {
-    "title": "Merchants",
-    "createTitle": "Create New Merchant",
-    "updateTitle": "Update Merchant",
-    "page": {
-      "title": "Merchants Management",
-      "description": "Manage and view merchant accounts and information",
-      "back": "Back to Merchants",
-      "refresh": "Refresh",
-      "addMerchant": "Add Merchant",
-      "searchPlaceholder": "Search merchants by name, email, or phone...",
-      "noMerchants": "No merchants found",
-      "noMatch": "No merchants match your search criteria.",
-      "emptyList": "There are no merchants in the database yet.",
-      "addFirstMerchant": "Add Your First Merchant",
-      "loading": "Loading merchants...",
-      "errorTitle": "Failed to load merchants",
-      "errorMessage": "There was an error fetching the merchants data.",
-      "tryAgain": "Try Again",
-      "language": {
-        "ar": "Arabic",
-        "en": "English",
-        "fr": "French"
-      },
-      "status": {
-        "verified": "Verified",
-        "pending": "Pending"
-      },
-      "columns": {
-        "id": "ID",
-        "merchant": "Merchant",
-        "email": "Email",
-        "phone": "Phone",
-        "language": "Language",
-        "verification": "Verification",
-        "joined": "Joined",
-        "actions": "Actions"
-      },
-      "filters": {
-        "all": "All",
-        "status": {
-          "label": "Status",
-          "active": "Active",
-          "inactive": "Inactive"
-        },
-        "verification": {
-          "label": "Verification",
-          "all": "All Verification",
-          "verified": "Verified",
-          "pending": "Pending"
-        },
-        "language": {
-          "label": "Language",
-          "all": "All Languages",
-          "ar": "Arabic",
-          "en": "English"
-        },
-        "clear": "Clear Filters"
-      },
-      "actions": {
-        "edit": "Edit",
-        "delete": "Delete",
-        "editTitle": "Edit merchant",
-        "deleteTitle": "Delete merchant"
-      },
-      "delete": {
-        "title": "Delete Merchant",
-        "description": "Are you sure you want to delete this merchant? This action cannot be undone and will remove all associated data.",
-        "success": "Merchant deleted successfully!",
-        "error": "Failed to delete merchant. Please try again."
-      }
-    },
-    "form": {
-      "basicInformation": "Merchant Information",
-      "accountSettings": "Account Settings",
-      "accountPreferences": "Account Preferences",
-      "updateDescription": "Edit merchant details and save changes. Note: Email and phone number cannot be changed.",
-      "updatePreferences": "Update merchant's account preferences",
-      "selectMerchantHelper": "Select a merchant from the list",
-      "searchMerchant": "Search Merchant",
-      "selectMerchant": "Select Merchant"
-    },
-    "create": {
-      "title": "Add New Merchant",
-      "description": "Create a new merchant account with contact information and security settings",
-      "form": {
-        "title": "Merchant Account Setup",
-        "description": "Fill in all required fields to create a new merchant account. All information is required.",
-        "submit": "Create Merchant Account",
-        "cancel": "Cancel",
-        "loading": "Creating merchant account...",
-        "success": "Merchant created successfully!",
-        "error": "Failed to create merchant. Please try again."
-      },
-      "sections": {
-        "basicInfo": {
-          "title": "Basic Information",
-          "description": "Enter merchant personal details"
-        },
-        "contactInfo": {
-          "title": "Contact Information",
-          "description": "Enter merchant's contact information"
-        },
-        "securityInfo": {
-          "title": "Security Settings",
-          "description": "Set merchant's account password and preferences"
-        }
-      },
-      "fields": {
-        "firstName": {
-          "label": "First Name",
-          "placeholder": "Ahmed",
-          "validation": "First name must be at least 2 characters",
-          "helper": "Enter merchant's first name"
-        },
-        "lastName": {
-          "label": "Last Name",
-          "placeholder": "Ali",
-          "validation": "Last name must be at least 2 characters",
-          "helper": "Enter merchant's last name"
-        },
-        "email": {
-          "label": "Email Address",
-          "placeholder": "ahmed.ali@merchant.com",
-          "validation": "Please enter a valid email address",
-          "helper": "Enter merchant's email address"
-        },
-        "phone": {
-          "label": "Phone Number",
-          "placeholder": "+966501234568",
-          "validation": "Please enter a valid phone number",
-          "helper": "Format: +CountryCode Number"
-        },
-        "password": {
-          "label": "Password",
-          "placeholder": "••••••••",
-          "validation": "Password must be at least 6 characters",
-          "helper": "Minimum 6 characters"
-        },
-        "confirmPassword": {
-          "label": "Confirm Password",
-          "placeholder": "••••••••",
-          "validation": "Passwords do not match",
-          "helper": "Re-enter the password"
-        },
-        "language": {
-          "label": "Language Preference",
-          "helper": "Select merchant's preferred language",
-          "options": {
-            "ar": "Arabic",
-            "en": "English"
-          }
-        },
-        "terms": {
-          "label": "Terms & Conditions",
-          "validation": "You must accept the terms and conditions",
-          "text": "I agree to the",
-          "termsLink": "Terms of Service",
-          "and": "and",
-          "privacyLink": "Privacy Policy"
-        }
-      }
-    },
-    "messages": {
-      "creating": "Creating merchant...",
-      "createSuccess": "Merchant created successfully!",
-      "createFailed": "Failed to create merchant: ",
-      "updating": "Updating merchant...",
-      "updateSuccess": "Merchant updated successfully!",
-      "updateFailed": "Failed to update merchant: ",
-      "deleting": "Deleting merchant...",
-      "deleteSuccess": "Merchant deleted successfully!",
-      "deleteFailed": "Failed to delete merchant. Please try again.",
-      "noResponse": "No response from server",
-      "merchantNotFound": "Merchant not found",
-      "merchantNotFoundTitle": "Merchant Not Found",
-      "merchantIdMissing": "The merchant ID is missing or invalid.",
-      "neverUpdated": "Never updated"
-    }
-  },
+
   "categories": {
     "title": "Categories",
     "createTitle": "Create New Category",
@@ -2302,140 +2210,6 @@
       "selectOption": "Select option",
       "variantsHelper": "Add product variants with different attributes and pricing",
       "createProduct": "Create Product"
-    }
-  },
-  "promos": {
-    "title": "Promo Rules",
-    "subtitle": "Manage coupons and promotional rules",
-    "addPromo": "Add Promo Rule",
-    "addFirstPromo": "Add First Promo Rule",
-    "searchPlaceholder": "Search promos...",
-    "noPromosFound": "No Promo Rules Found",
-    "noPromosYet": "No promo rules have been created yet",
-    "noSearchResults": "No promo rules match your search criteria",
-    "loading": "Loading promo rules...",
-    "loadError": "Failed to load promo rules",
-    "loadErrorDesc": "There was an error loading the promo rules. Please try again.",
-    "deleteTitle": "Delete Promo Rule",
-    "deleteDescription": "Are you sure you want to delete this promo rule? This action cannot be undone.",
-    "table": {
-      "code": "Code",
-      "name": "Name",
-      "rules": "Rules",
-      "actions": "Actions",
-      "dates": "Validity",
-      "usage": "Usage"
-    },
-    "noCoupon": "No coupon",
-    "noRules": "No rules",
-    "limit": "Limit",
-    "timesUsed": "times used",
-    "filters": {
-      "allStatus": "All Status",
-      "allTypes": "All Types",
-      "active": "Active",
-      "inactive": "Inactive",
-      "expired": "Expired",
-      "coupon": "Coupon",
-      "rule": "Rule",
-      "search": "Search",
-      "status": "Status",
-      "type": "Type"
-    },
-    "form": {
-      "basicInformation": "Basic Information",
-      "promoInformation": "Promo Information",
-      "enterPromoDetails": "Enter promotional rule details",
-      "addNewPromo": "Add New Promo Rule",
-      "createNewPromoRule": "Create a new promotional rule or coupon",
-      "enterPromoDetailsWithRules": "Create promotional rules with conditions and actions",
-      "promoName": "Promo Name",
-      "promoNamePlaceholder": "Enter promo rule name",
-      "promoNameHelper": "Enter a descriptive name for the promo rule",
-      "nameMinLength": "Name must be at least 2 characters",
-      "promoType": "Promo Type",
-      "selectPromoType": "Select promo type",
-      "selectPromoTypeRequired": "Please select a promo type",
-      "promoTypeHelper": "RULE: Applies automatically, COUPON: Requires coupon code",
-      "rule": "Rule",
-      "promoDates": "Promo Dates",
-      "endDateAfterStart": "End date must be after start date",
-      "dateRangeHelper": "Set the start and end dates for the promo rule",
-      "updatePromoDetails": "Update promotional rule details",
-      "updatePromo": "Update Promo Rule",
-      "editPromoDetails": "Edit promo rule details",
-      "promoTypeCannotChange": "Promo type cannot be changed after creation",
-      "updatePromoRules": "Update conditions for the promo rule",
-      "updatePromoActions": "Update what happens when rules are met",
-      "couponCode": "Coupon Code",
-      "couponCodeHelper": "Coupon code (if applicable)",
-      "totalUsages": "Total Usages",
-      "totalUsagesHelper": "Number of times this promo has been used",
-      "createdAtHelper": "When this promo rule was created",
-      "updatedAtHelper": "When this promo rule was last updated",
-      "systemInformation": "System information about the promo rule",
-      "action": "Action",
-      "fillPromoDetails": "Fill Promo Details",
-      "coupon": "Coupon",
-      "status": "Status",
-      "selectStatus": "Select status",
-      "selectStatusRequired": "Please select a status",
-      "statusHelper": "Set the initial status of the promo rule",
-      "active": "Active",
-      "inactive": "Inactive",
-      "expired": "Expired",
-      "startDate": "Start Date",
-      "startDateRequired": "Please select a start date",
-      "startDateHelper": "When the promo rule becomes active",
-      "endDate": "End Date",
-      "endDateRequired": "Please select an end date",
-      "endDateHelper": "When the promo rule expires",
-      "rules": "Rules",
-      "definePromoRules": "Define conditions for the promo rule",
-      "addRule": "Add Rule",
-      "ruleType": "Rule Type",
-      "selectRuleType": "Select rule type",
-      "operator": "Operator",
-      "value": "Value",
-      "yes": "Yes",
-      "no": "No",
-      "selectItems": "Select Items",
-      "enterIds": "Enter IDs",
-      "enterCommaSeparated": "Enter comma-separated IDs (e.g., 1, 2, 3)",
-      "actions": "Actions",
-      "definePromoActions": "Define what happens when rules are met",
-      "addAction": "Add Action",
-      "actionType": "Action Type",
-      "selectActionType": "Select action type",
-      "percentage": "Percentage",
-      "maxDiscount": "Maximum Discount",
-      "amount": "Amount",
-      "buyQuantity": "Buy Quantity",
-      "freeQuantity": "Free Quantity",
-      "discountPercent": "Discount Percentage",
-      "buyProductIds": "Buy Product IDs",
-      "discountProductIds": "Discount Product IDs",
-      "productIds": "Product IDs",
-      "enterCommaSeparatedIds": "Enter comma-separated IDs",
-      "enterPercentage": "Enter percentage (1-100)",
-      "enterValue": "Enter value",
-      "min": "Minimum",
-      "range": "Range",
-      "atLeastOneRuleRequired": "At least one rule is required",
-      "atLeastOneActionRequired": "At least one action is required",
-      "createPromo": "Create Promo Rule"
-    },
-    "messages": {
-      "backToPromos": "Back to Promo Rules",
-      "deleteSuccess": "Promo rule deleted successfully",
-      "creating": "Creating promo rule...",
-      "createSuccess": "Promo rule created successfully",
-      "createFailed": "Failed to create promo rule",
-      "promoNotFound": "Promo Rule Not Found",
-      "promoIdMissing": "Promo rule ID is missing",
-      "updateSuccess": "Promo rule updated successfully",
-      "updateFailed": "Failed to update promo rule",
-      "noResponse": "No response from server"
     }
   },
   "messages": {

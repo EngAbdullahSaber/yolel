@@ -13,6 +13,7 @@ import {
   Calendar,
   Zap,
   Trophy,
+  Download,
 } from "lucide-react";
 import { GetPanigationMethod } from "../../services/apis/ApiMethod";
 import { useTranslation } from "react-i18next";
@@ -133,6 +134,24 @@ export default function DeletedImagesPage() {
       return format(new Date(dateString), "MMM dd, yyyy HH:mm");
     } catch (e) {
       return dateString;
+    }
+  };
+
+  const handleDownload = async (imageUrl: string, id: number) => {
+    try {
+      const response = await fetch(imageUrl);
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `image-${id}.jpg`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("Download error:", error);
+      // We don't have toast imported here yet, let's check
     }
   };
 
@@ -413,12 +432,21 @@ export default function DeletedImagesPage() {
                   </div>
               </div>
 
-              <button
-                onClick={() => setSelectedImage(null)}
-                className="mt-auto py-4 bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-black rounded-2xl transition-all hover:scale-[1.02] active:scale-95"
-              >
-                {t("common.close")}
-              </button>
+              <div className="mt-auto flex flex-col gap-2">
+                <button
+                  onClick={() => setSelectedImage(null)}
+                  className="py-4 bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-black rounded-2xl transition-all hover:scale-[1.02] active:scale-95"
+                >
+                  {t("common.close")}
+                </button>
+                <button
+                  onClick={() => handleDownload(formatImageUrl(selectedImage.url), selectedImage.id)}
+                  className="py-4 bg-blue-100 dark:bg-blue-900/40 hover:bg-blue-200 dark:hover:bg-blue-900/60 text-blue-600 dark:text-blue-400 font-black rounded-2xl transition-all flex items-center justify-center gap-2"
+                >
+                  <Download size={18} />
+                  {t("common.download") || "Download"}
+                </button>
+              </div>
             </div>
           </div>
         </div>

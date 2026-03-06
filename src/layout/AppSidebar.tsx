@@ -26,6 +26,7 @@ import {
   FiFlag,
   FiCreditCard,
   FiShield,
+  FiBarChart,
 } from "react-icons/fi";
 import { Filter, History as HistoryIcon } from "lucide-react";
 
@@ -170,11 +171,11 @@ const AppSidebar: React.FC = () => {
   const location = useLocation();
 
   const navItems: NavItem[] = [
-    // {
-    //   icon: <FiHome className="w-5 h-5" />,
-    //   name: t("sidebar.dashboard"),
-    //   path: "/dashboard",
-    // },
+    {
+      icon: <FiHome className="w-5 h-5" />,
+      name: t("sidebar.dashboard"),
+      path: "/dashboard",
+    },
   
     {
       icon: <FiThumbsUp className="w-5 h-5" />,
@@ -185,6 +186,11 @@ const AppSidebar: React.FC = () => {
       icon: <FiImage className="w-5 h-5" />,
       name: t("adminImages.title"),
       path: "/admin-images",
+    },
+    {
+      icon: <FiBarChart className="w-5 h-5" />,
+      name: t("adminImages.level.title"),
+      path: "/admin-images/level",
     },
     {
       icon: <HistoryIcon className="w-5 h-5" />,
@@ -235,6 +241,11 @@ const AppSidebar: React.FC = () => {
       icon: <FiTag className="w-5 h-5" />,
       name: t("sidebar.promoCodes", { defaultValue: "Promo Codes" }),
       path: "/promo-codes",
+    },
+    {
+      icon: <FiShoppingBag className="w-5 h-5" />,
+      name: t("merchants.title"),
+      path: "/merchants",
     },
   ];
 

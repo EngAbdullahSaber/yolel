@@ -38,6 +38,9 @@ import PromoCodesPage from "./pages/PromoCodes/PromoCodesPage";
 import CreatePromoCodePage from "./pages/PromoCodes/CreatePromoCodePage";
 import UpdatePromoCodePage from "./pages/PromoCodes/UpdatePromoCodePage";
 import AppealsPage from "./pages/Appeals/AppealsPage";
+import ImageLevelPage from "./pages/AdminImages/ImageLevelPage";
+import MerchantsPage from "./pages/Merchants/MerchantsPage";
+import CreateMerchantPage from "./pages/Merchants/CreateMerchantPage";
 
 export default function App() {
   useLanguage();
@@ -83,6 +86,7 @@ export default function App() {
             <Route path="admin-images" element={<AdminImagesPage />} />
             <Route path="admin-images/create" element={<CreateAdminImagePage />} />
             <Route path="admin-images/deleted" element={<DeletedImagesPage />} />
+            <Route path="admin-images/level" element={<ImageLevelPage />} />
             <Route path="users" element={<UsersPage />} />
             <Route path="subadmins" element={<SubAdminsPage />} />
             <Route path="subadmins/create" element={<CreateSubAdminPage />} />
@@ -94,6 +98,8 @@ export default function App() {
             <Route path="promo-codes" element={<PromoCodesPage />} />
             <Route path="promo-codes/create" element={<CreatePromoCodePage />} />
             <Route path="promo-codes/edit/:id" element={<UpdatePromoCodePage />} />
+            <Route path="merchants" element={<MerchantsPage />} />
+            <Route path="merchants/create" element={<CreateMerchantPage />} />
             <Route path="appeals" element={<AppealsPage />} />
 
         

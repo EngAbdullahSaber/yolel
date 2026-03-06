@@ -10,6 +10,7 @@ import {
   Plus,
   Lock,
   Unlock,
+  Filter,
 } from "lucide-react";
 import { DataTable } from "../../components/shared/DataTable";
 import { TableFilters } from "../../components/shared/TableFilters";
@@ -315,27 +316,47 @@ export default function SubAdminsPage() {
           </div>
         </div>
 
-        <TableFilters
-          searchTerm={searchTerm}
-          onSearchChange={(val) => {
-            setSearchTerm(val);
-            setCurrentPage(1);
-          }}
-          statusFilter={statusFilter}
-          onStatusFilter={(val) => {
-            setStatusFilter(val);
-            setCurrentPage(1);
-          }}
-          showFilters={showFilters}
-          onShowFiltersChange={setShowFilters}
-          onClearFilters={clearFilters}
-          searchPlaceholder={t("common.searchPlaceholder")}
-          filterOptions={["all", "Blocked", "UnBlocked"]}
-          filterLabel={t("common.status")}
-          show={false}
-          hideSearch={false}
-          alwaysShowFilters={true}
-        />
+        {/* Filter Bar */}
+        <div className="bg-white dark:bg-slate-800 rounded-[2rem] p-3 shadow-xl shadow-slate-200/50 dark:shadow-none border border-slate-100 dark:border-slate-700 flex flex-col md:flex-row items-center gap-4">
+          <div className="relative flex-1 group w-full">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-500 transition-colors" size={18} />
+            <input 
+              type="text"
+              placeholder={t("common.searchPlaceholder") || "Search..."}
+              className="w-full pl-12 pr-4 py-3.5 bg-slate-50 dark:bg-slate-900/50 border border-slate-100 dark:border-slate-800 rounded-2xl text-sm font-bold focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 transition-all"
+              value={searchTerm}
+              onChange={(e) => {
+                setSearchTerm(e.target.value);
+                setCurrentPage(1);
+              }}
+            />
+          </div>
+          
+          <div className="flex items-center gap-2 p-1.5 bg-slate-50 dark:bg-slate-900/50 border border-slate-100 dark:border-slate-800 rounded-2xl w-full md:w-auto">
+            <div className="px-3 py-2 text-xs font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
+              <Filter size={14} />
+              {t("common.status")}
+            </div>
+            <div className="flex gap-1">
+              {["all", "Blocked", "UnBlocked"].map((status) => (
+                <button
+                  key={status}
+                  onClick={() => {
+                    setStatusFilter(status);
+                    setCurrentPage(1);
+                  }}
+                  className={`px-4 py-2 rounded-xl text-xs font-black transition-all duration-300 ${
+                    statusFilter === status
+                      ? "bg-white dark:bg-slate-800 text-blue-600 shadow-sm border border-slate-100 dark:border-slate-700"
+                      : "text-slate-500 hover:text-slate-700 dark:hover:text-slate-300"
+                  }`}
+                >
+                  {status === "all" ? t("common.all") : t(`common.${status.toLowerCase()}`)}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
 
         {/* Loading State */}
         {isLoading && (

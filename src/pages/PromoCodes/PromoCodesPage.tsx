@@ -34,6 +34,9 @@ interface PromoCode {
   merchantName: string;
   createdAt: string;
   updatedAt: string;
+  _count?: {
+    usages: number;
+  };
 }
 
 interface PromoCodesResponse {
@@ -309,6 +312,10 @@ export default function PromoCodesPage() {
                            <div className="flex items-center gap-2 text-[11px] text-slate-400 font-black uppercase">
                              <Clock size={14} />
                              {t(`promoCodes.types.${promo.type}`)}
+                           </div>
+                           <div className="flex items-center gap-2 text-[11px] text-slate-400 font-black uppercase">
+                             <Tag size={14} className="text-emerald-500" />
+                             <span>{t("promoCodes.table.usages")}: {promo._count?.usages || 0}</span>
                            </div>
                            <Link 
                              to={`/promo-codes/edit/${promo.id}`}

@@ -3,11 +3,20 @@ import { FormField } from "../../components/shared/GenericForm";
 import { z } from "zod";
 import { Tag, Calendar, Percent, Store, Type, ArrowLeft, Loader2 } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
-import { UpdateMethod, GetSpecifiedMethod } from "../../services/apis/ApiMethod";
+import { UpdateMethod, GetSpecifiedMethod, GetPanigationMethod } from "../../services/apis/ApiMethod";
 import { useToast } from "../../hooks/useToast";
-import { useQueryClient } from "@tanstack/react-query";
+import { useQueryClient, useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { CreateForm } from "../../components/shared/GenericForm/CreateForm";
+
+interface Merchant {
+  id: number;
+  name: string;
+}
+
+interface MerchantsResponse {
+  data: Merchant[];
+}
 
 export default function UpdatePromoCodePage() {
   const { t, i18n } = useTranslation();
@@ -21,6 +30,14 @@ export default function UpdatePromoCodePage() {
   const [isFetching, setIsFetching] = useState(true);
   const [initialData, setInitialData] = useState<any>(null);
 
+  // Fetch merchants for the dropdown
+  const { data: merchantsData } = useQuery<MerchantsResponse>({
+    queryKey: ["merchants-all"],
+    queryFn: () => GetPanigationMethod("user/merchant/all", 1, 1000, lang, ""),
+  });
+
+  const merchants = merchantsData?.data || [];
+
   useEffect(() => {
     const fetchPromoCode = async () => {
       try {
@@ -32,7 +49,8 @@ export default function UpdatePromoCodePage() {
             ...data,
             startDate: data.startDate ? new Date(data.startDate).toISOString().split('T')[0] : "",
             endDate: data.endDate ? new Date(data.endDate).toISOString().split('T')[0] : "",
-            discountPercent: Number(data.discountPercent)
+            discountPercent: Number(data.discountPercent),
+            merchantId: data.merchantId ? data.merchantId.toString() : (data.merchant?.id ? data.merchant.id.toString() : "")
           });
         } else {
           toast.error(t("promoCodes.form.error"));
@@ -102,14 +120,19 @@ export default function UpdatePromoCodePage() {
       cols: 6,
       validation: z.coerce.number().min(0).max(100),
     },
+    // Merchant ID
     {
-      name: "merchantName",
+      name: "merchantId",
       label: t("promoCodes.form.merchantName"),
-      type: "text",
+      type: "select",
       placeholder: t("promoCodes.form.merchantNamePlaceholder"),
       required: false,
       icon: <Store size={18} />,
       cols: 6,
+      options: [
+        { label: t("common.all") || "Select Merchant", value: "" },
+        ...merchants.map((m) => ({ label: m.name, value: m.id.toString() }))
+      ],
     },
   ];
 
@@ -129,8 +152,14 @@ export default function UpdatePromoCodePage() {
         ...data,
         startDate: new Date(data.startDate).toISOString(),
         endDate: new Date(data.endDate).toISOString(),
-        discountPercent: Number(data.discountPercent)
+        discountPercent: Number(data.discountPercent),
+        merchantId: data.merchantId ? Number(data.merchantId) : null,
       };
+
+      // Remove merchantName just in case
+      delete requestData.merchantName;
+      // Also remove merchant object if it exists from initial data spreading
+      delete requestData.merchant;
 
       const result = await UpdateMethod("promo-code", requestData, id, lang);
 
