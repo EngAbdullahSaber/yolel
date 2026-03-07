@@ -1,10 +1,13 @@
-// components/ProtectedRoute.jsx
 import { useEffect, useState } from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
+import { getUserData } from "../../../services/utils";
 
 export const ProtectedRoute = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const location = useLocation();
+  const user = getUserData();
+  const role = user?.role?.toUpperCase();
 
   useEffect(() => {
     const checkAuth = () => {
@@ -40,18 +43,35 @@ export const ProtectedRoute = ({ children }) => {
     );
   }
 
-  return isAuthenticated ? children : <Navigate to="/" replace />;
+  if (!isAuthenticated) {
+    return <Navigate to="/" replace />;
+  }
+
+  // Role-based access control for merchants
+  if (role === "MERCHANT") {
+    const allowedPaths = ["/promo-codes", "/promo-codes/create"];
+    const isAllowed = allowedPaths.some(path => location.pathname === path) || 
+                      location.pathname.startsWith("/promo-codes/edit/");
+    
+    if (!isAllowed) {
+      return <Navigate to="/promo-codes" replace />;
+    }
+  }
+
+  return children;
 };
 
 export const PublicRoute = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const user = getUserData();
+  const role = user?.role?.toUpperCase();
 
   useEffect(() => {
     const checkAuth = () => {
       const token =
-        localStorage.getItem("auth_token") ||
-        sessionStorage.getItem("auth_token");
+        localStorage.getItem("yolel_auth_token") ||
+        sessionStorage.getItem("yolel_auth_token");
       setIsAuthenticated(!!token);
       setIsLoading(false);
     };
@@ -72,5 +92,10 @@ export const PublicRoute = ({ children }) => {
     );
   }
 
-  return isAuthenticated ? <Navigate to="/votes" replace /> : children;
+  if (isAuthenticated) {
+    const targetPath = role === "MERCHANT" ? "/promo-codes" : "/votes";
+    return <Navigate to={targetPath} replace />;
+  }
+
+  return children;
 };

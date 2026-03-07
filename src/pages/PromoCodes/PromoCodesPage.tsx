@@ -23,6 +23,7 @@ import { toast } from "react-hot-toast";
 import { useQueryClient } from "@tanstack/react-query";
 import { DeleteDialog } from "../../components/shared/DeleteDialog";
 import { Pagination } from "../../components/shared/Pagination";
+import { getUserData } from "../../services/utils";
 
 interface PromoCode {
   id: number;
@@ -62,21 +63,31 @@ export default function PromoCodesPage() {
   const [isDeleting, setIsDeleting] = useState(false);
   const [selectedPromoCode, setSelectedPromoCode] = useState<PromoCode | null>(null);
 
+  const user = getUserData();
+  const isMerchant = user?.role?.toUpperCase() === "MERCHANT";
+  const merchantId = user?.id; // Standardized to use user.id
+
   const {
     data: promoCodesData,
     isLoading,
     isError,
     refetch,
   } = useQuery({
-    queryKey: ["promoCodes", currentPage, rowsPerPage, lang],
+    queryKey: ["promoCodes", currentPage, rowsPerPage, lang, isMerchant, merchantId],
     queryFn: async () => {
       try {
+        const additionalParams: any = {};
+        if (isMerchant && merchantId) {
+          additionalParams.merchantId = merchantId;
+        }
+
         const response = (await GetPanigationMethod(
           "promo-code",
           currentPage,
           rowsPerPage,
           lang,
-          ""
+          "",
+          additionalParams
         )) as PromoCodesResponse;
         
         return response;

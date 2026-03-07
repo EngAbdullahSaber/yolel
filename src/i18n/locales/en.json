@@ -130,7 +130,8 @@
     "periods": {
       "all": "All Time",
       "lastMonth": "Last Month",
-      "lastWeek": "Last Week"
+      "lastWeek": "Last Week",
+      "lastDay": "Last Day"
     },
     "stats": {
       "users": "Total Users",
@@ -138,7 +139,7 @@
       "votes": "Total Votes",
       "reports": "Content Reports",
       "deleted": "Deleted Content",
-      "subscriptions": "Premium Subs",
+      "userSubscriptions": "User Subscriptions",
       "promoCodes": "Active Promos"
     },
     "charts": {
@@ -185,7 +186,8 @@
     "terms": "Terms & Conditions",
     "termsSubtitle": "Manage Terms and Conditions Content",
     "deletedImages": "Deleted Images",
-    "appeals": "Appeals"
+    "appeals": "Appeals",
+    "notifications": "Notifications"
   },
   "users": {
     "title": "User Management",
@@ -206,6 +208,12 @@
     "roles": {
       "user": "User",
       "admin": "Admin"
+    },
+    "messages": {
+      "blockSuccess": "User blocked successfully",
+      "unblockSuccess": "User unblocked successfully",
+      "blockError": "Failed to block user",
+      "unblockError": "Failed to unblock user"
     }
   },
   "merchants": {
@@ -558,8 +566,8 @@
       "discountPercent": "Discount Percentage",
       "discountPercentPlaceholder": "0-100",
       "type": "Promo Type",
-      "merchantName": "Select Store",
-      "merchantNamePlaceholder": "Choose a merchant store",
+      "merchantName": "Select Merchant",
+      "merchantNamePlaceholder": "Choose a merchant",
       "submit": "Create Promo Code",
       "submitUpdate": "Update Promo Code",
       "creating": "Creating promo code...",
@@ -611,6 +619,49 @@
     "invalidCredentials": "Invalid email or password",
     "signUpSuccess": "Sign up successful! Please sign in.",
     "signInSuccess": "Sign in successful!"
+  },
+  "notifications": {
+    "title": "Notifications",
+    "subtitle": "Send push notifications to your users",
+    "broadcast": {
+      "title": "Broadcast Notification",
+      "description": "Send a general notification to all users.",
+      "send": "Send Broadcast",
+      "sending": "Sending Broadcast...",
+      "success": "Broadcast notification sent successfully!",
+      "error": "Failed to send broadcast notification"
+    },
+    "appUpdate": {
+      "title": "App Update Notification",
+      "description": "Notify users about a new version of the app.",
+      "send": "Send Update Alert",
+      "sending": "Sending update alert...",
+      "success": "App update notification sent successfully!",
+      "error": "Failed to send app update notification",
+      "dialogTitle": "Send Update Notification?",
+      "dialogDescription": "Are you sure you want to notify all users about a new version being available in the stores?",
+      "alertInfo": "Auto-formatted Alert",
+      "alertBody": "This will send a pre-configured notification to all users informing them about the latest available update."
+    },
+    "form": {
+      "titleAr": "Title (Arabic)",
+      "titleEn": "Title (English)",
+      "descAr": "Description (Arabic)",
+      "descEn": "Description (English)",
+      "titlePlaceholderAr": "أدخل العنوان بالعربية",
+      "titlePlaceholderEn": "Enter title in English",
+      "descPlaceholderAr": "أدخل الوصف بالعربية",
+      "descPlaceholderEn": "Enter description in English",
+      "langAr": "Arabic",
+      "langEn": "English"
+    },
+    "bestPractices": {
+      "title": "Notification Best Practices",
+      "item1": "Avoid over-sending (limit to 1-2 per day)",
+      "item2": "Keep titles short and engaging",
+      "item3": "Ensure both languages are correct",
+      "item4": "Timing matters - send during active hours"
+    }
   },
   "orders": {
     "title": "Orders",

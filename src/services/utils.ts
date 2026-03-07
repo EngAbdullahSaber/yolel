@@ -141,24 +141,33 @@ export function getAuthToken(): string | null {
 
 // Get user data
 export function getUserData(): any | null {
+  let user: any = null;
+
   // Check localStorage first
   const localStorageUser = localStorage.getItem(USER_DATA_KEY);
   if (localStorageUser) {
     try {
-      return JSON.parse(localStorageUser);
+      user = JSON.parse(localStorageUser);
     } catch (e) {
       console.error("Error parsing user data from localStorage:", e);
     }
   }
 
-  // Check sessionStorage
-  const sessionStorageUser = sessionStorage.getItem(USER_DATA_KEY);
-  if (sessionStorageUser) {
-    try {
-      return JSON.parse(sessionStorageUser);
-    } catch (e) {
-      console.error("Error parsing user data from sessionStorage:", e);
+  // Check sessionStorage if not in localStorage
+  if (!user) {
+    const sessionStorageUser = sessionStorage.getItem(USER_DATA_KEY);
+    if (sessionStorageUser) {
+      try {
+        user = JSON.parse(sessionStorageUser);
+      } catch (e) {
+        console.error("Error parsing user data from sessionStorage:", e);
+      }
     }
+  }
+
+  if (user) {
+    // Extract user info if it's nested (handles common API response structures)
+    return user.user || user.data?.user || user;
   }
 
   return null;

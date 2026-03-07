@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router";
 import { useTranslation } from "react-i18next";
 import { useLanguage } from "../hooks/useLanguage";
+import { getUserData } from "../services/utils";
 import {
   FiPackage,
   FiGlobe,
@@ -27,6 +28,7 @@ import {
   FiCreditCard,
   FiShield,
   FiBarChart,
+  FiBell,
 } from "react-icons/fi";
 import { Filter, History as HistoryIcon } from "lucide-react";
 
@@ -169,8 +171,10 @@ const AppSidebar: React.FC = () => {
   const { isExpanded, isMobileOpen, isHovered, setIsHovered } = useSidebar();
   const { isRTL } = useLanguage();
   const location = useLocation();
+  const user = getUserData();
+  const role = user?.role?.toUpperCase();
 
-  const navItems: NavItem[] = [
+  const allNavItems: NavItem[] = [
     {
       icon: <FiHome className="w-5 h-5" />,
       name: t("sidebar.dashboard"),
@@ -247,7 +251,16 @@ const AppSidebar: React.FC = () => {
       name: t("merchants.title"),
       path: "/merchants",
     },
+    {
+      icon: <FiBell className="w-5 h-5" />,
+      name: t("notifications.title"),
+      path: "/notifications",
+    },
   ];
+
+  const navItems = role === "MERCHANT" 
+    ? allNavItems.filter(item => item.path === "/promo-codes")
+    : allNavItems;
 
   const categoryItems: CategoryItem[] = [
     

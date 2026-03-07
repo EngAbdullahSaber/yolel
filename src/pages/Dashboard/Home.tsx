@@ -158,7 +158,7 @@ export default function Home() {
           />
           <StatCard
             icon={<CreditCard size={24} />}
-            label={t("dashboard.stats.subscriptions") || "Subscriptions"}
+            label={t("dashboard.stats.userSubscriptions") || "User Subscriptions"}
             value={stats.userSubscriptions}
             color="purple"
           />

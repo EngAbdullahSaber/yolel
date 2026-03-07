@@ -8,6 +8,8 @@ import { useToast } from "../../hooks/useToast";
 import { useQueryClient, useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { CreateForm } from "../../components/shared/GenericForm/CreateForm";
+import { getUserData } from "../../services/utils";
+import { FieldType } from "../../components/shared/GenericForm/types";
 
 interface Merchant {
   id: number;
@@ -30,10 +32,15 @@ export default function UpdatePromoCodePage() {
   const [isFetching, setIsFetching] = useState(true);
   const [initialData, setInitialData] = useState<any>(null);
 
+  const user = getUserData();
+  const isMerchant = user?.role?.toUpperCase() === "MERCHANT";
+  const merchantId = user?.id;
+console.log(user)
   // Fetch merchants for the dropdown
   const { data: merchantsData } = useQuery<MerchantsResponse>({
     queryKey: ["merchants-all"],
     queryFn: () => GetPanigationMethod("user/merchant/all", 1, 1000, lang, ""),
+    enabled: !isMerchant, // Don't fetch if user is a merchant
   });
 
   const merchants = merchantsData?.data || [];
@@ -72,20 +79,20 @@ export default function UpdatePromoCodePage() {
     {
       name: "code",
       label: t("promoCodes.form.code"),
-      type: "text",
+      type: "text" as FieldType,
       placeholder: t("promoCodes.form.codePlaceholder"),
       required: true,
       icon: <Tag size={18} />,
-      cols: 6,
+      cols: 6 as any,
       validation: z.string().min(1, t("common.isRequired")),
     },
     {
       name: "type",
       label: t("promoCodes.form.type"),
-      type: "select",
+      type: "select" as FieldType,
       required: true,
       icon: <Type size={18} />,
-      cols: 6,
+      cols: 6 as any,
       options: [
         { label: t("promoCodes.types.ONLINE_DISCOUNT"), value: "ONLINE_DISCOUNT" },
         { label: t("promoCodes.types.SYSTEM"), value: "SYSTEM" },
@@ -95,46 +102,46 @@ export default function UpdatePromoCodePage() {
     {
       name: "startDate",
       label: t("promoCodes.form.startDate"),
-      type: "date",
+      type: "date" as FieldType,
       required: true,
       icon: <Calendar size={18} />,
-      cols: 6,
+      cols: 6 as any,
       validation: z.string().min(1, t("common.isRequired")),
     },
     {
       name: "endDate",
       label: t("promoCodes.form.endDate"),
-      type: "date",
+      type: "date" as FieldType,
       required: true,
       icon: <Calendar size={18} />,
-      cols: 6,
+      cols: 6 as any,
       validation: z.string().min(1, t("common.isRequired")),
     },
     {
       name: "discountPercent",
       label: t("promoCodes.form.discountPercent"),
-      type: "number",
+      type: "number" as FieldType,
       placeholder: t("promoCodes.form.discountPercentPlaceholder"),
       required: true,
       icon: <Percent size={18} />,
-      cols: 6,
+      cols: 6 as any,
       validation: z.coerce.number().min(0).max(100),
     },
     // Merchant ID
     {
       name: "merchantId",
       label: t("promoCodes.form.merchantName"),
-      type: "select",
+      type: "select" as FieldType,
       placeholder: t("promoCodes.form.merchantNamePlaceholder"),
       required: false,
       icon: <Store size={18} />,
-      cols: 6,
+      cols: 6 as any,
       options: [
         { label: t("common.all") || "Select Merchant", value: "" },
         ...merchants.map((m) => ({ label: m.name, value: m.id.toString() }))
       ],
     },
-  ];
+  ].filter(field => !isMerchant || field.name !== "merchantId");
 
   const handleSubmit = async (data: any) => {
     setIsLoading(true);
@@ -153,7 +160,7 @@ export default function UpdatePromoCodePage() {
         startDate: new Date(data.startDate).toISOString(),
         endDate: new Date(data.endDate).toISOString(),
         discountPercent: Number(data.discountPercent),
-        merchantId: data.merchantId ? Number(data.merchantId) : null,
+        merchantId: data.merchantId ? Number(data.merchantId) : merchantId,
       };
 
       // Remove merchantName just in case

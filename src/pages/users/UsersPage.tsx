@@ -1,5 +1,4 @@
-import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useState, useEffect } from "react";
 import {
   RefreshCw,
   User as UserIcon,
@@ -12,10 +11,15 @@ import {
   UserX,
   Search,
   Filter,
+  Image as FiImage,
+  Lock,
+  Unlock,
 } from "lucide-react";
 import { DataTable } from "../../components/shared/DataTable";
 import { TableFilters } from "../../components/shared/TableFilters";
-import { GetPanigationMethod, GetPanigationMethodWithFilter } from "../../services/apis/ApiMethod";
+import { GetPanigationMethod, GetPanigationMethodWithFilter, UpdateMethod } from "../../services/apis/ApiMethod";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useToast } from "../../hooks/useToast";
 import { useTranslation } from "react-i18next";
 
 interface User {
@@ -25,11 +29,18 @@ interface User {
   notificationToken: string;
   userPoints: number;
   isBlocked: boolean;
+  name: string | null;
   email: string | null;
   activeStatus: boolean;
   role: string;
   createdAt: string;
   updatedAt: string;
+  deletedImages?: {
+    total: number;
+    lastMonth: number;
+    lastWeek: number;
+    lastDay: number;
+  };
 }
 
 interface UsersResponse {
@@ -46,13 +57,25 @@ interface UsersResponse {
 export default function UsersPage() {
   const { t, i18n } = useTranslation();
   const lang = i18n.language || "en";
+  const toast = useToast();
+  const queryClient = useQueryClient();
 
   // Pagination states
   const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [searchTerm, setSearchTerm] = useState("");
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [showFilters, setShowFilters] = useState(false);
+
+  // Debounce search term
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearchTerm(searchTerm);
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, [searchTerm]);
 
 
 
@@ -76,8 +99,8 @@ export default function UsersPage() {
     try {
       const additionalParams: any = {};
        additionalParams.role = "USER";
-      if (status === "Blocked") additionalParams.isBlocked = false;
-      if (status === "UnBlocked") additionalParams.isBlocked = true;
+      if (status === "Blocked") additionalParams.isBlocked = true;
+      if (status === "UnBlocked") additionalParams.isBlocked = false;
 
       const response = (await GetPanigationMethodWithFilter(
         "user",
@@ -123,14 +146,31 @@ export default function UsersPage() {
     isError,
     refetch,
   } = useQuery({
-    queryKey: ["users-list", currentPage, rowsPerPage, statusFilter],
+    queryKey: ["users-list", currentPage, rowsPerPage, debouncedSearchTerm, statusFilter],
     queryFn: () =>
       fetchUsers({
         page: currentPage,
         pageSize: rowsPerPage,
-        search: searchTerm,
+        search: debouncedSearchTerm,
         status: statusFilter,
       }),
+  });
+
+  const blockMutation = useMutation({
+    mutationFn: async ({ id, isBlocked }: { id: number; isBlocked: boolean }) => {
+      return await UpdateMethod("user/admin", { isBlocked }, `${id}/block`, lang);
+    },
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({ queryKey: ["users-list"] });
+      toast.success(
+        variables.isBlocked
+          ? t("users.messages.blockSuccess")
+          : t("users.messages.unblockSuccess")
+      );
+    },
+    onError: () => {
+      toast.error(t("common.error"));
+    },
   });
 
   const columns = [
@@ -141,6 +181,24 @@ export default function UsersPage() {
       render: (value: number) => (
         <div className="font-bold text-slate-700 dark:text-slate-300">
           #{value}
+        </div>
+      ),
+    },
+    {
+      key: "name",
+      label: t("common.name"),
+      render: (value: string) => (
+        <div className="font-bold text-slate-900 dark:text-white">
+          {value || t("common.na")}
+        </div>
+      ),
+    },
+    {
+      key: "email",
+      label: t("common.email"),
+      render: (value: string) => (
+        <div className="font-medium text-slate-500 text-xs">
+          {value || t("common.na")}
         </div>
       ),
     },
@@ -239,21 +297,73 @@ export default function UsersPage() {
       ),
     },
     {
-        key: "updatedAt",
-        label: t("common.updatedAt"),
-        width: "180px",
-        render: (value: string) => (
-          <div className="flex flex-col opacity-75">
-            <div className="flex items-center gap-1.5 text-sm font-medium text-slate-600 dark:text-slate-400">
-              <RefreshCw size={12} className="text-slate-400" />
-              {new Date(value).toLocaleDateString(lang)}
-            </div>
-            <span className="text-[10px] text-slate-500 ml-4.5">
-              {new Date(value).toLocaleTimeString(lang, { hour: '2-digit', minute: '2-digit' })}
+      key: "deletedImages",
+      label: t("sidebar.deletedImages"),
+      width: "220px",
+      render: (value: any) => (
+        <div className="flex flex-col gap-2">
+          {/* Total Counter */}
+          <div className="flex items-center gap-2 px-3 py-1 bg-rose-50 dark:bg-rose-900/20 rounded-lg w-fit mx-auto border border-rose-100 dark:border-rose-800/50">
+            <FiImage size={14} className="text-rose-600 dark:text-rose-400" />
+            <span className="text-sm font-black text-rose-700 dark:text-rose-300">
+              {value?.total || 0}
             </span>
           </div>
-        ),
-      },
+
+          {/* Periods Grid */}
+          <div className="flex items-center justify-center gap-3">
+             {/* Day */}
+             <div className="flex flex-col items-center">
+                <span className="text-[9px] font-black uppercase text-slate-400 tracking-tighter">
+                  {t("dashboard.periods.lastDay").split(' ')[0]}
+                </span>
+                <span className={`text-xs font-bold ${value?.lastDay > 0 ? "text-blue-600 dark:text-blue-400" : "text-slate-300"}`}>
+                  {value?.lastDay || 0}
+                </span>
+             </div>
+             
+             {/* Week */}
+             <div className="flex flex-col items-center border-x border-slate-100 dark:border-slate-700 px-3">
+                <span className="text-[9px] font-black uppercase text-slate-400 tracking-tighter">
+                  {t("dashboard.periods.lastWeek").split(' ')[0]}
+                </span>
+                <span className={`text-xs font-bold ${value?.lastWeek > 0 ? "text-indigo-600 dark:text-indigo-400" : "text-slate-300"}`}>
+                  {value?.lastWeek || 0}
+                </span>
+             </div>
+
+             {/* Month */}
+             <div className="flex flex-col items-center">
+                <span className="text-[9px] font-black uppercase text-slate-400 tracking-tighter">
+                  {t("dashboard.periods.lastMonth").split(' ')[0]}
+                </span>
+                <span className={`text-xs font-bold ${value?.lastMonth > 0 ? "text-purple-600 dark:text-purple-400" : "text-slate-300"}`}>
+                  {value?.lastMonth || 0}
+                </span>
+             </div>
+          </div>
+        </div>
+      ),
+    },
+    {
+      key: "actions",
+      label: t("common.actions"),
+      width: "100px",
+      render: (_: any, row: User) => (
+        <div className="flex justify-center">
+            <button
+                onClick={() => blockMutation.mutate({ id: row.id, isBlocked: !row.isBlocked })}
+                className={`p-2 rounded-xl transition-all ${
+                    row.isBlocked 
+                    ? 'bg-emerald-50 text-emerald-600 hover:bg-emerald-100' 
+                    : 'bg-rose-50 text-rose-600 hover:bg-rose-100'
+                }`}
+            >
+                {row.isBlocked ?  <Lock size={16} /> : <Unlock size={16} />}
+            </button>
+        </div>
+      )
+    }
   ];
 
   const handleRefresh = () => {

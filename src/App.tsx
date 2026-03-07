@@ -41,6 +41,7 @@ import AppealsPage from "./pages/Appeals/AppealsPage";
 import ImageLevelPage from "./pages/AdminImages/ImageLevelPage";
 import MerchantsPage from "./pages/Merchants/MerchantsPage";
 import CreateMerchantPage from "./pages/Merchants/CreateMerchantPage";
+import NotificationsPage from "./pages/Notifications/NotificationsPage";
 
 export default function App() {
   useLanguage();
@@ -101,6 +102,7 @@ export default function App() {
             <Route path="merchants" element={<MerchantsPage />} />
             <Route path="merchants/create" element={<CreateMerchantPage />} />
             <Route path="appeals" element={<AppealsPage />} />
+            <Route path="notifications" element={<NotificationsPage />} />
 
         
             <Route path="alerts" element={<Alerts />} />

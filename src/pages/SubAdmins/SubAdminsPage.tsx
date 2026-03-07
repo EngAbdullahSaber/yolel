@@ -11,6 +11,7 @@ import {
   Lock,
   Unlock,
   Filter,
+  Image as FiImage,
 } from "lucide-react";
 import { DataTable } from "../../components/shared/DataTable";
 import { TableFilters } from "../../components/shared/TableFilters";
@@ -26,11 +27,18 @@ interface User {
   notificationToken: string | null;
   userPoints: number;
   isBlocked: boolean;
+  name: string | null;
   email: string | null;
   activeStatus: boolean;
   role: string;
   createdAt: string;
   updatedAt: string;
+  deletedImages?: {
+    total: number;
+    lastMonth: number;
+    lastWeek: number;
+    lastDay: number;
+  };
 }
 
 interface UsersResponse {
@@ -177,10 +185,19 @@ export default function SubAdminsPage() {
       ),
     },
     {
+      key: "name",
+      label: t("common.name"),
+      render: (value: string) => (
+        <div className="font-bold text-slate-900 dark:text-white">
+          {value || t("common.na")}
+        </div>
+      ),
+    },
+    {
       key: "email",
       label: t("common.email"),
       render: (value: string) => (
-        <div className="font-medium text-slate-900 text-center dark:text-white">
+        <div className="font-medium text-slate-600 dark:text-slate-400">
           {value || t("common.na")}
         </div>
       ),
@@ -221,11 +238,60 @@ export default function SubAdminsPage() {
       ),
     },
     {
+      key: "deletedImages",
+      label: t("sidebar.deletedImages"),
+      width: "220px",
+      render: (value: any) => (
+        <div className="flex flex-col gap-2">
+          {/* Total Counter */}
+          <div className="flex items-center gap-2 px-3 py-1 bg-rose-50 dark:bg-rose-900/20 rounded-lg w-fit mx-auto border border-rose-100 dark:border-rose-800/50">
+            <FiImage size={14} className="text-rose-600 dark:text-rose-400" />
+            <span className="text-sm font-black text-rose-700 dark:text-rose-300">
+              {value?.total || 0}
+            </span>
+          </div>
+
+          {/* Periods Grid */}
+          <div className="flex items-center justify-center gap-3">
+             {/* Day */}
+             <div className="flex flex-col items-center">
+                <span className="text-[9px] font-black uppercase text-slate-400 tracking-tighter">
+                  {t("dashboard.periods.lastDay").split(' ')[0]}
+                </span>
+                <span className={`text-xs font-bold ${value?.lastDay > 0 ? "text-blue-600 dark:text-blue-400" : "text-slate-300"}`}>
+                  {value?.lastDay || 0}
+                </span>
+             </div>
+             
+             {/* Week */}
+             <div className="flex flex-col items-center border-x border-slate-100 dark:border-slate-700 px-3">
+                <span className="text-[9px] font-black uppercase text-slate-400 tracking-tighter">
+                  {t("dashboard.periods.lastWeek").split(' ')[0]}
+                </span>
+                <span className={`text-xs font-bold ${value?.lastWeek > 0 ? "text-indigo-600 dark:text-indigo-400" : "text-slate-300"}`}>
+                  {value?.lastWeek || 0}
+                </span>
+             </div>
+
+             {/* Month */}
+             <div className="flex flex-col items-center">
+                <span className="text-[9px] font-black uppercase text-slate-400 tracking-tighter">
+                  {t("dashboard.periods.lastMonth").split(' ')[0]}
+                </span>
+                <span className={`text-xs font-bold ${value?.lastMonth > 0 ? "text-purple-600 dark:text-purple-400" : "text-slate-300"}`}>
+                  {value?.lastMonth || 0}
+                </span>
+             </div>
+          </div>
+        </div>
+      ),
+    },
+    {
       key: "createdAt",
       label: t("common.createdAt"),
-      width: "180px",
+      width: "150px",
       render: (value: string) => (
-        <div className="flex flex-col">
+        <div className="flex flex-col items-center">
           <div className="flex items-center gap-1.5 text-sm font-semibold text-slate-900 dark:text-white">
             <Calendar size={14} className="text-blue-500" />
             {new Date(value).toLocaleDateString(lang)}
@@ -248,7 +314,7 @@ export default function SubAdminsPage() {
                 : "bg-rose-50 text-rose-600 hover:bg-rose-100 dark:bg-rose-500/10 dark:text-rose-400"
             }`}
           >
-            {row.isBlocked ? <Unlock size={18} /> : <Lock size={18} />}
+            {row.isBlocked ?  <Lock size={18} /> : <Unlock size={18} />}
           </button>
         </div>
       ),

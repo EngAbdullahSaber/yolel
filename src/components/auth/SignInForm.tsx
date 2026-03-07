@@ -92,8 +92,9 @@ export default function SignInForm() {
 
     toast.success(message, { duration: 2000 });
 
-    // Navigate to dashboard
-    setTimeout(() => navigate("/votes"), 1500);
+    // Navigate based on role
+    const targetPath = user?.role?.toUpperCase() === "MERCHANT" ? "/promo-codes" : "/votes";
+    setTimeout(() => navigate(targetPath), 1500);
   };
 
   const handleLoginError = (error: any) => {
