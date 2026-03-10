@@ -93,7 +93,13 @@ export default function SignInForm() {
     toast.success(message, { duration: 2000 });
 
     // Navigate based on role
-    const targetPath = user?.role?.toUpperCase() === "MERCHANT" ? "/promo-codes" : "/votes";
+    let targetPath = "/votes";
+    const role = user?.role?.toUpperCase();
+    if (role === "MERCHANT") {
+      targetPath = "/promo-codes";
+    } else if (role === "SUB_ADMIN") {
+      targetPath = "/reports";
+    }
     setTimeout(() => navigate(targetPath), 1500);
   };
 

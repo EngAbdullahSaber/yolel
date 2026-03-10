@@ -112,8 +112,7 @@ export default function CreatePromoCodePage() {
       icon: <Store size={18} />,
       cols: 6 as any,
       options: [
-        { label: t("common.all") || "Select Merchant", value: "" },
-        ...merchants.map((m) => ({ label: m.name, value: m.id.toString() }))
+         ...merchants.map((m) => ({ label: m.name, value: m.id.toString() }))
       ],
     },
   ].filter(field => !isMerchant || field.name !== "merchantId");

@@ -256,7 +256,7 @@ export default function SubAdminsPage() {
              {/* Day */}
              <div className="flex flex-col items-center">
                 <span className="text-[9px] font-black uppercase text-slate-400 tracking-tighter">
-                  {t("dashboard.periods.lastDay").split(' ')[0]}
+                  {t("dashboard.periods.lastDay")}
                 </span>
                 <span className={`text-xs font-bold ${value?.lastDay > 0 ? "text-blue-600 dark:text-blue-400" : "text-slate-300"}`}>
                   {value?.lastDay || 0}
@@ -266,7 +266,7 @@ export default function SubAdminsPage() {
              {/* Week */}
              <div className="flex flex-col items-center border-x border-slate-100 dark:border-slate-700 px-3">
                 <span className="text-[9px] font-black uppercase text-slate-400 tracking-tighter">
-                  {t("dashboard.periods.lastWeek").split(' ')[0]}
+                  {t("dashboard.periods.lastWeek")}
                 </span>
                 <span className={`text-xs font-bold ${value?.lastWeek > 0 ? "text-indigo-600 dark:text-indigo-400" : "text-slate-300"}`}>
                   {value?.lastWeek || 0}
@@ -276,7 +276,7 @@ export default function SubAdminsPage() {
              {/* Month */}
              <div className="flex flex-col items-center">
                 <span className="text-[9px] font-black uppercase text-slate-400 tracking-tighter">
-                  {t("dashboard.periods.lastMonth").split(' ')[0]}
+                  {t("dashboard.periods.lastMonth")}
                 </span>
                 <span className={`text-xs font-bold ${value?.lastMonth > 0 ? "text-purple-600 dark:text-purple-400" : "text-slate-300"}`}>
                   {value?.lastMonth || 0}

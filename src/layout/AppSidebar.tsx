@@ -260,6 +260,8 @@ const AppSidebar: React.FC = () => {
 
   const navItems = role === "MERCHANT" 
     ? allNavItems.filter(item => item.path === "/promo-codes")
+    : role === "SUB_ADMIN"
+    ? allNavItems.filter(item => item.path === "/reports")
     : allNavItems;
 
   const categoryItems: CategoryItem[] = [

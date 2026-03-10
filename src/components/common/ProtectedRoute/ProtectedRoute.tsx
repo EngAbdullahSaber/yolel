@@ -58,6 +58,15 @@ export const ProtectedRoute = ({ children }) => {
     }
   }
 
+  // Role-based access control for sub admin
+  if (role === "SUB_ADMIN") {
+    const isAllowed = location.pathname === "/reports";
+    
+    if (!isAllowed) {
+      return <Navigate to="/reports" replace />;
+    }
+  }
+
   return children;
 };
 
@@ -93,7 +102,7 @@ export const PublicRoute = ({ children }) => {
   }
 
   if (isAuthenticated) {
-    const targetPath = role === "MERCHANT" ? "/promo-codes" : "/votes";
+    const targetPath = role === "MERCHANT" ? "/promo-codes" : role === "SUB_ADMIN" ? "/reports" : "/votes";
     return <Navigate to={targetPath} replace />;
   }
 
