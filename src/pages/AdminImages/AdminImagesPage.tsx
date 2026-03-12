@@ -294,7 +294,7 @@ export default function AdminImagesPage() {
               <span className="text-xs font-black uppercase tracking-wider">{t("adminImages.table.age")}</span>
             </div>
             <div className="flex bg-slate-100 dark:bg-slate-900/50 p-1.5 rounded-xl gap-1 overflow-x-auto no-scrollbar">
-              {(["", "child", "youth", "old"] as const).map((a) => (
+              {(["", "child", "teenager", "youth", "old"] as const).map((a) => (
                 <button
                   key={a}
                   onClick={() => {
@@ -450,18 +450,22 @@ export default function AdminImagesPage() {
 
                       {/* Subscription Badges */}
                       <div className="flex items-center gap-2">
-                        {image.isSimilarImageSubscription && (
-                          <span className="flex-1 text-center px-2 py-1 bg-purple-50 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 text-[10px] font-bold rounded-lg flex items-center justify-center gap-1">
-                            <Copy size={10} />
-                            {t("adminImages.subscriptions.similar.badge")}
-                          </span>
-                        )}
-                        {image.isVoteSubscription && (
-                          <span className="flex-1 text-center px-2 py-1 bg-amber-50 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300 text-[10px] font-bold rounded-lg flex items-center justify-center gap-1">
-                            <Star size={10} />
-                            {t("adminImages.subscriptions.vote.badge")}
-                          </span>
-                        )}
+                        <span className={`flex-1 text-center px-2 py-1 text-[10px] font-bold rounded-lg flex items-center justify-center gap-1 ${
+                          image.isSimilarImageSubscription
+                            ? "bg-purple-50 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300"
+                            : "bg-slate-50 dark:bg-slate-800/50 text-slate-400 dark:text-slate-500 border border-slate-100 dark:border-slate-700 opacity-60"
+                        }`}>
+                          <Copy size={10} />
+                          {t("adminImages.subscriptions.similar.badge")}
+                        </span>
+                        <span className={`flex-1 text-center px-2 py-1 text-[10px] font-bold rounded-lg flex items-center justify-center gap-1 ${
+                          image.isVoteSubscription
+                            ? "bg-amber-50 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300"
+                            : "bg-slate-50 dark:bg-slate-800/50 text-slate-400 dark:text-slate-500 border border-slate-100 dark:border-slate-700 opacity-60"
+                        }`}>
+                          <Star size={10} />
+                          {t("adminImages.subscriptions.vote.badge")}
+                        </span>
                       </div>
 
                       {/* Stats Row */}

@@ -284,18 +284,22 @@ export default function ImageLevelPage() {
                       ></div>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="bg-slate-50 dark:bg-slate-900/40 p-3 rounded-2xl border border-slate-100 dark:border-slate-800">
-                         <p className="text-[9px] text-slate-400 font-black uppercase tracking-widest mb-1">{t("adminImages.table.interactionCount")}</p>
-                         <div className="flex items-center gap-2 font-black text-slate-900 dark:text-white">
-                           <Zap size={14} className="text-indigo-500" />
+                    <div className="grid grid-cols-1 gap-4">
+                      <div className="bg-slate-50 dark:bg-slate-900/40 p-4 rounded-3xl border border-slate-100 dark:border-slate-800 flex flex-col gap-1.5 transition-colors hover:bg-slate-100 dark:hover:bg-slate-800/60">
+                         <p className="text-[10px] text-slate-400 font-extrabold uppercase tracking-widest leading-none">{t("adminImages.table.interactionCount")}</p>
+                         <div className="flex items-center gap-2.5 font-black text-slate-900 dark:text-white text-xl">
+                           <div className="p-1.5 bg-indigo-50 dark:bg-indigo-900/30 rounded-lg">
+                             <Zap size={14} className="text-indigo-500" />
+                           </div>
                            {image.interactionCount}
                          </div>
                       </div>
-                      <div className="bg-slate-50 dark:bg-slate-900/40 p-3 rounded-2xl border border-slate-100 dark:border-slate-800">
-                         <p className="text-[9px] text-slate-400 font-black uppercase tracking-widest mb-1">{t("adminImages.table.winCount")}</p>
-                         <div className="flex items-center gap-2 font-black text-emerald-600 dark:text-emerald-400">
-                           <Trophy size={14} />
+                      <div className="bg-slate-50 dark:bg-slate-900/40 p-4 rounded-3xl border border-slate-100 dark:border-slate-800 flex flex-col gap-1.5 transition-colors hover:bg-slate-100 dark:hover:bg-slate-800/60">
+                         <p className="text-[10px] text-slate-400 font-extrabold uppercase tracking-widest leading-none">{t("adminImages.table.winCount")}</p>
+                         <div className="flex items-center gap-2.5 font-black text-emerald-600 dark:text-emerald-400 text-xl">
+                           <div className="p-1.5 bg-emerald-50 dark:bg-emerald-900/30 rounded-lg">
+                             <Trophy size={14} />
+                           </div>
                            {image.winCount}
                          </div>
                       </div>

@@ -29,6 +29,7 @@ import {
   FiShield,
   FiBarChart,
   FiBell,
+  FiPhone,
 } from "react-icons/fi";
 import { Filter, History as HistoryIcon } from "lucide-react";
 
@@ -225,6 +226,11 @@ const AppSidebar: React.FC = () => {
       icon: <FiMail className="w-5 h-5" />,
       name: t("sidebar.contactUs", { defaultValue: "Contact Us" }),
       path: "/contact-us",
+    },
+    {
+      icon: <FiPhone className="w-5 h-5" />,
+      name: t("sidebar.contactNumber", { defaultValue: "Contact Number" }),
+      path: "/contact-number",
     },
     {
       icon: <FiFlag className="w-5 h-5" />,

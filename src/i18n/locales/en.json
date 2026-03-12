@@ -170,6 +170,7 @@
     "users": "Users",
     "subadmins": "SubAdmins",
     "contactUs": "Contact Us",
+    "contactNumber": "Contact Number",
     "reports": "Reports",
     "subscriptions": "Subscriptions",
     "promoCodes": "Promo Codes",
@@ -334,6 +335,7 @@
     },
     "age": {
       "youth": "Youth",
+      "teenager": "Teenager",
       "old": "Old",
       "child": "Child"
     },
@@ -460,6 +462,16 @@
       "deleteSuccess": "Message deleted successfully",
       "deleteError": "Failed to delete message"
     }
+  },
+  "contactNumber": {
+    "title": "Contact Number",
+    "subtitle": "Update the official support phone number for the platform",
+    "label": "Phone Number",
+    "hint": "Please enter the phone number with country code, e.g. 966...",
+    "submit": "Save Changes",
+    "updateSuccess": "Contact number updated successfully",
+    "updateError": "Failed to update contact number",
+    "phoneRequired": "Phone number is required"
   },
   "reports": {
     "title": "Reports",

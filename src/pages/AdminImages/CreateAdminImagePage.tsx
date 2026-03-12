@@ -15,7 +15,7 @@ import {
   X,
 } from "lucide-react";
 
-const AGE_OPTIONS = ["youth", "old", "child"] as const;
+const AGE_OPTIONS = ["child", "teenager", "youth", "old"] as const;
 const GENDER_OPTIONS = ["male", "female"] as const;
 
 type Age = (typeof AGE_OPTIONS)[number];
@@ -225,7 +225,7 @@ export default function CreateAdminImagePage() {
                 {t("adminImages.table.age")}
                 <span className="text-rose-500 ml-1">*</span>
               </label>
-              <div className="grid grid-cols-3 gap-3">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                 {AGE_OPTIONS.map((option) => (
                   <button
                     key={option}
@@ -241,7 +241,7 @@ export default function CreateAdminImagePage() {
                       <CheckCircle2 size={14} className="absolute top-2 right-2 text-blue-500" />
                     )}
                     <span className="text-2xl">
-                      {option === "youth" ? "🧑" : option === "old" ? "👴" : "👶"}
+                      {option === "old" ? "👴" : option === "youth" ? "🧑" : option === "teenager" ? "🧒" : "👶"}
                     </span>
                     <span className="capitalize">{t(`adminImages.age.${option}`)}</span>
                   </button>
