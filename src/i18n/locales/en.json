@@ -490,6 +490,7 @@
     "blockingUser": "Blocking user...",
     "blockSuccess": "User blocked successfully",
     "blockError": "Failed to block user",
+    "markReviewed": "Review",
     "details": {
       "title": "Report Details",
       "close": "Close"
@@ -502,7 +503,10 @@
       "deleteSuccess": "Report deleted successfully",
       "deleteError": "Failed to delete report",
       "deleteImageSuccess": "Image deleted successfully",
-      "deleteImageError": "Failed to delete image"
+      "deleteImageError": "Failed to delete image",
+      "reviewing": "Marking as reviewed...",
+      "reviewSuccess": "Report marked as reviewed",
+      "reviewError": "Failed to mark as reviewed"
     },
     "deleteImage": {
       "title": "Delete Image",
@@ -528,7 +532,8 @@
     },
     "payTypes": {
       "SHARE_APP": "Share App",
-      "ONLINE_PAYMENT": "Online Payment"
+      "ONLINE_PAYMENT": "Online Payment",
+      "INVITE": "Invite Friends"
     },
     "price": {
       "free": "Free",
@@ -546,6 +551,8 @@
       "price": "Subscription Price",
       "shareCount": "Required Shares",
       "isActive": "Is Plan Active?",
+      "perImage": "Is price per image?",
+      "perImageShort": "Per Image",
       "submit": "Update Plan"
     }
   },

@@ -17,12 +17,13 @@ import {
   FileText,
   Image as ImageIcon,
   UserX,
+  CheckCircle,
 } from "lucide-react";
 import { GetPanigationMethod, DeleteMethod, UpdateMethod } from "../../services/apis/ApiMethod";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-hot-toast";
 import { DeleteDialog } from "../../components/shared/DeleteDialog";
-import { BASE_URL } from "../../services/utils";
+import { BASE_URL, getUserData } from "../../services/utils";
 
 interface Report {
   id: number;
@@ -67,6 +68,10 @@ export default function ReportsPage() {
   const [imageToDeleteId, setImageToDeleteId] = useState<number | null>(null);
   const [isDeletingImage, setIsDeletingImage] = useState(false);
   const [isBlocking, setIsBlocking] = useState(false);
+  const [isReviewing, setIsReviewing] = useState(false);
+  
+  const user = getUserData();
+  const isAdmin = user?.role?.toUpperCase() === "ADMIN";
 
   const fetchReports = async ({
     page,
@@ -193,6 +198,26 @@ export default function ReportsPage() {
       toast.error(t("reports.blockError") || "Failed to block user");
     } finally {
       setIsBlocking(false);
+    }
+  };
+
+  const handleReviewReport = async (reportId: number) => {
+    setIsReviewing(true);
+    const loadingToast = toast.loading(t("reports.messages.reviewing") || "Marking as reviewed...");
+    try {
+      const response = await UpdateMethod("report", {}, `${reportId}/review`, lang);
+      if (response) {
+        toast.dismiss(loadingToast);
+        toast.success(t("reports.messages.reviewSuccess") || "Report marked as reviewed");
+        queryClient.invalidateQueries({ queryKey: ["reports"] });
+      } else {
+        throw new Error("Failed to review report");
+      }
+    } catch (error: any) {
+      toast.dismiss(loadingToast);
+      toast.error(t("reports.messages.reviewError") || "Failed to mark as reviewed");
+    } finally {
+      setIsReviewing(false);
     }
   };
 
@@ -383,20 +408,22 @@ export default function ReportsPage() {
                             >
                               <Eye size={18} />
                             </button>
-                           {!report.image?.deletedAt && (<button
+                           {isAdmin && !report.image?.deletedAt && (<button
                               onClick={() => handleDeleteImage(report.image.id)}
                               className="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-rose-600 hover:text-white transition-all transform active:scale-95 shadow-sm"
                               title={t("reports.deleteImage.title") || "Delete Image"}
                             >
                               <ImageIcon size={18} />
                             </button>)}
-                            <button
-                              onClick={() => handleDelete(report)}
-                              className="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-rose-600 hover:text-white transition-all transform active:scale-95 shadow-sm"
-                              title={t("common.delete")}
-                            >
-                              <Trash2 size={18} />
-                            </button>
+                            {isAdmin && (
+                              <button
+                                onClick={() => handleDelete(report)}
+                                className="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-rose-600 hover:text-white transition-all transform active:scale-95 shadow-sm"
+                                title={t("common.delete")}
+                              >
+                                <Trash2 size={18} />
+                              </button>
+                            )}
                           </div>
                         </td>
                       </tr>
@@ -576,7 +603,7 @@ export default function ReportsPage() {
               </div>
 
               {/* Action Buttons */}
-              <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+              <div className="grid grid-cols-2 lg:grid-cols-5 gap-3">
                 <button
                   onClick={() => handleBlockUser(selectedReport.image.userId)}
                   disabled={isBlocking}
@@ -585,20 +612,30 @@ export default function ReportsPage() {
                   <UserX size={20} />
                   {t("reports.blockUser")}
                 </button>
-              {!selectedReport.image?.deletedAt && <button
+                <button
+                  onClick={() => handleReviewReport(selectedReport.id)}
+                  disabled={isReviewing}
+                  className="py-4 bg-emerald-600 hover:bg-emerald-700 text-white font-black rounded-2xl transition-all active:scale-[0.98] shadow-lg shadow-emerald-500/30 flex items-center justify-center gap-2 disabled:opacity-50"
+                >
+                  <CheckCircle size={20} />
+                  {t("reports.markReviewed") || "Review"}
+                </button>
+                {isAdmin && !selectedReport.image?.deletedAt && <button
                   onClick={() => handleDeleteImage(selectedReport.image.id)}
                   className="py-4 bg-orange-500 hover:bg-orange-600 text-white font-black rounded-2xl transition-all active:scale-[0.98] shadow-lg shadow-orange-500/30 flex items-center justify-center gap-2"
                 >
                   <ImageIcon size={20} />
                   {t("reports.deleteImage.title")}
                 </button>}
-                <button
-                  onClick={() => handleDelete(selectedReport)}
-                  className="py-4 bg-rose-600 hover:bg-rose-700 text-white font-black rounded-2xl transition-all active:scale-[0.98] shadow-lg shadow-rose-600/30 flex items-center justify-center gap-2"
-                >
-                  <Trash2 size={20} />
-                  {t("common.delete")}
-                </button>
+                {isAdmin && (
+                  <button
+                    onClick={() => handleDelete(selectedReport)}
+                    className="py-4 bg-rose-600 hover:bg-rose-700 text-white font-black rounded-2xl transition-all active:scale-[0.98] shadow-lg shadow-rose-600/30 flex items-center justify-center gap-2"
+                  >
+                    <Trash2 size={20} />
+                    {t("common.delete")}
+                  </button>
+                )}
                 <button
                   onClick={() => setSelectedReport(null)}
                   className="py-4 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-900 dark:text-white font-black rounded-2xl transition-all active:scale-[0.98] border border-slate-200 dark:border-slate-700 flex items-center justify-center gap-2"

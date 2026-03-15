@@ -21,10 +21,11 @@ import { useLanguage } from "../../hooks/useLanguage";
 interface Subscription {
   id: number;
   type: "VOTES" | "SIMILAR_IMAGE";
-  payType: "SHARE_APP" | "ONLINE_PAYMENT";
+  payType: "SHARE_APP" | "ONLINE_PAYMENT" | "INVITE";
   price: string | null;
   shareCount: number | null;
   isActive: boolean;
+  perImage: boolean;
   createdAt: string;
   updatedAt: string;
 }
@@ -57,6 +58,7 @@ export default function SubscriptionsPage() {
     price: "",
     shareCount: "",
     isActive: true,
+    perImage: false,
   });
 
   const {
@@ -90,6 +92,7 @@ export default function SubscriptionsPage() {
       price: sub.price || "",
       shareCount: sub.shareCount?.toString() || "",
       isActive: sub.isActive,
+      perImage: sub.perImage || false,
     });
     setIsEditModalOpen(true);
   };
@@ -110,6 +113,10 @@ export default function SubscriptionsPage() {
         payload.price = parseFloat(formData.price);
       } else {
         payload.shareCount = parseInt(formData.shareCount);
+      }
+
+      if (editingSub.payType === "INVITE") {
+        payload.perImage = formData.perImage;
       }
 
       await UpdateMethod("app-subscription", payload, editingSub.id, lang);
@@ -258,6 +265,11 @@ export default function SubscriptionsPage() {
                           <div className="flex items-baseline gap-1">
                             <span className="text-5xl font-black text-slate-900 dark:text-white tracking-tighter">${sub.price}</span>
                             <span className="text-slate-400 font-bold text-sm">/ {t("subscriptions.price.currency")}</span>
+                            {sub.payType === "INVITE" && sub.perImage && (
+                              <span className="ml-2 px-2 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 text-[10px] font-black uppercase rounded-lg">
+                                {t("subscriptions.form.perImageShort") || "Per Image"}
+                              </span>
+                            )}
                           </div>
                         ) : (
                           <div className="flex flex-col gap-3">
@@ -363,12 +375,13 @@ export default function SubscriptionsPage() {
                       </div>
                     )}
 
-                    <div className="flex items-center justify-between p-6 bg-slate-50 dark:bg-slate-800/50 rounded-3xl border border-slate-100 dark:border-slate-700">
-                      <div className="flex items-center gap-3">
-                        {formData.isActive ? <CheckCircle2 className="text-emerald-500" size={24} /> : <XCircle className="text-rose-500" size={24} />}
-                        <span className="font-bold text-slate-700 dark:text-slate-200">{t("subscriptions.form.isActive")}</span>
-                      </div>
-                      <button
+                    <div className="grid grid-cols-1 gap-4">
+                      <div className="flex items-center justify-between p-6 bg-slate-50 dark:bg-slate-800/50 rounded-3xl border border-slate-100 dark:border-slate-700">
+                        <div className="flex items-center gap-3">
+                          {formData.isActive ? <CheckCircle2 className="text-emerald-500" size={24} /> : <XCircle className="text-rose-500" size={24} />}
+                          <span className="font-bold text-slate-700 dark:text-slate-200">{t("subscriptions.form.isActive")}</span>
+                        </div>
+                       <button
                         type="button"
                         onClick={() => setFormData({ ...formData, isActive: !formData.isActive })}
                         className={`relative inline-flex h-8 w-14 items-center rounded-full transition-colors focus:outline-none ring-offset-2 focus:ring-2 focus:ring-blue-500 ${
@@ -381,6 +394,29 @@ export default function SubscriptionsPage() {
                           : (isRTL ? '-translate-x-1' : 'translate-x-1')
                         }`} />
                       </button>
+                      </div>
+
+                      {editingSub.payType === "INVITE" && (
+                        <div className="flex items-center justify-between p-6 bg-slate-50 dark:bg-slate-800/50 rounded-3xl border border-slate-100 dark:border-slate-700">
+                          <div className="flex items-center gap-3">
+                            <ImageIcon className="text-blue-500" size={24} />
+                            <span className="font-bold text-slate-700 dark:text-slate-200">{t("subscriptions.form.perImage")}</span>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => setFormData({ ...formData, perImage: !formData.perImage })}
+                            className={`relative inline-flex h-8 w-14 items-center rounded-full transition-colors focus:outline-none ring-offset-2 focus:ring-2 focus:ring-blue-500 ${
+                              formData.perImage ? 'bg-blue-500' : 'bg-slate-300 dark:bg-slate-600'
+                            }`}
+                          >
+                            <span className={`inline-block h-6 w-6 transform rounded-full bg-white transition-transform ${
+                              formData.perImage 
+                              ? (isRTL ? '-translate-x-7' : 'translate-x-7') 
+                              : (isRTL ? '-translate-x-1' : 'translate-x-1')
+                            }`} />
+                          </button>
+                        </div>
+                      )}
                     </div>
 
                     <div className="pt-4">

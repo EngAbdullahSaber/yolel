@@ -490,6 +490,7 @@
     "blockingUser": "جاري حظر المستخدم...",
     "blockSuccess": "تم حظر المستخدم بنجاح",
     "blockError": "فشل في حظر المستخدم",
+    "markReviewed": "مراجعة",
     "details": {
       "title": "تفاصيل البلاغ",
       "close": "إغلاق"
@@ -502,7 +503,10 @@
       "deleteSuccess": "تم حذف البلاغ بنجاح",
       "deleteError": "فشل في حذف البلاغ",
       "deleteImageSuccess": "تم حذف الصورة بنجاح",
-      "deleteImageError": "فشل في حذف الصورة"
+      "deleteImageError": "فشل في حذف الصورة",
+      "reviewing": "جاري التعيين كمراجع...",
+      "reviewSuccess": "تم تعيين البلاغ كمراجع بنجاح",
+      "reviewError": "فشل في تعيين البلاغ كمراجع"
     },
     "deleteImage": {
       "title": "حذف الصورة",
@@ -528,7 +532,8 @@
     },
     "payTypes": {
       "SHARE_APP": "مشاركة التطبيق",
-      "ONLINE_PAYMENT": "الدفع عبر الإنترنت"
+      "ONLINE_PAYMENT": "الدفع عبر الإنترنت",
+      "INVITE": "دعوة الأصدقاء"
     },
     "price": {
       "free": "مجاني",
@@ -546,6 +551,8 @@
       "price": "سعر الاشتراك",
       "shareCount": "عدد المشاركات المطلوبة",
       "isActive": "هل الخطة نشطة؟",
+      "perImage": "هل السعر لكل صورة؟",
+      "perImageShort": "لكل صورة",
       "submit": "تحديث الخطة"
     }
   },
