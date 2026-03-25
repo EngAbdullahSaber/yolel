@@ -71,7 +71,11 @@ export default function ReportsPage() {
   const [isReviewing, setIsReviewing] = useState(false);
   
   const user = getUserData();
-  const isAdmin = user?.role?.toUpperCase() === "ADMIN";
+  const role = user?.role?.toUpperCase();
+  const isAdmin = role === "ADMIN";
+  const isSubAdmin = role === "SUB_ADMIN";
+  const canDeleteImage = isAdmin || isSubAdmin;
+  const canDeleteReport = isAdmin;
 
   const fetchReports = async ({
     page,
@@ -408,14 +412,14 @@ export default function ReportsPage() {
                             >
                               <Eye size={18} />
                             </button>
-                           {isAdmin && !report.image?.deletedAt && (<button
+                             {canDeleteImage && !report.image?.deletedAt && (<button
                               onClick={() => handleDeleteImage(report.image.id)}
                               className="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-rose-600 hover:text-white transition-all transform active:scale-95 shadow-sm"
                               title={t("reports.deleteImage.title") || "Delete Image"}
                             >
                               <ImageIcon size={18} />
                             </button>)}
-                            {isAdmin && (
+                            {canDeleteReport && (
                               <button
                                 onClick={() => handleDelete(report)}
                                 className="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-rose-600 hover:text-white transition-all transform active:scale-95 shadow-sm"
@@ -620,14 +624,14 @@ export default function ReportsPage() {
                   <CheckCircle size={20} />
                   {t("reports.markReviewed") || "Review"}
                 </button>
-                {isAdmin && !selectedReport.image?.deletedAt && <button
+                {canDeleteImage && !selectedReport.image?.deletedAt && <button
                   onClick={() => handleDeleteImage(selectedReport.image.id)}
                   className="py-4 bg-orange-500 hover:bg-orange-600 text-white font-black rounded-2xl transition-all active:scale-[0.98] shadow-lg shadow-orange-500/30 flex items-center justify-center gap-2"
                 >
                   <ImageIcon size={20} />
                   {t("reports.deleteImage.title")}
                 </button>}
-                {isAdmin && (
+                {canDeleteReport && (
                   <button
                     onClick={() => handleDelete(selectedReport)}
                     className="py-4 bg-rose-600 hover:bg-rose-700 text-white font-black rounded-2xl transition-all active:scale-[0.98] shadow-lg shadow-rose-600/30 flex items-center justify-center gap-2"

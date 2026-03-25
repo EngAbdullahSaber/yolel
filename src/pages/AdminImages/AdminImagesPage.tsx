@@ -168,7 +168,7 @@ export default function AdminImagesPage() {
     setIsDeleting(true);
     const loadingToast = toast.loading(t("common.Deleting") || "Deleting image...");
     try {
-      const response = await DeleteMethod("/image", imageToDelete.id, lang);
+      const response = await DeleteMethod("image", imageToDelete.id, lang);
       if (response) {
         toast.dismiss(loadingToast);
         toast.success(t("common.deleteSuccess") || "Image deleted successfully");
@@ -402,14 +402,14 @@ export default function AdminImagesPage() {
                           e.stopPropagation();
                           handleDelete(image);
                         }}
-                        className="absolute top-3 left-14 p-2 bg-rose-500/80 hover:bg-rose-600 backdrop-blur-sm text-white rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 shadow-lg"
+                        className="absolute top-3 right-3 p-2 bg-rose-500 hover:bg-rose-600 text-white rounded-full transition-all duration-300 shadow-xl z-20"
                         title={t("common.delete")}
                       >
-                        <Trash2 size={14} />
+                        <Trash2 size={16} />
                       </button>
 
                       {/* Allow For Vote Badge */}
-                      <div className="absolute top-3 right-3">
+                      <div className="absolute top-3 left-14">
                         {image.isAllowForVote ? (
                           <div className="p-1.5 bg-emerald-500/90 backdrop-blur-sm rounded-full shadow-lg">
                             <CheckCircle2 size={14} className="text-white" />
