@@ -498,7 +498,7 @@ export default function AppealsPage() {
           <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onClick={() => setSelectedAppeal(null)} />
           <div className="relative bg-white dark:bg-slate-900 w-full max-w-2xl rounded-[3rem] shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
             <div className="relative aspect-video">
-               <img src={selectedAppeal.url} className="w-full h-full object-cover" alt="" />
+               <img src={import.meta.env.VITE_IMAGE_BASE_URL + selectedAppeal.url} className="w-full h-full object-cover" alt="" />
                <button 
                   onClick={() => setSelectedAppeal(null)}
                   className="absolute top-6 right-6 p-2 bg-black/20 hover:bg-black/40 backdrop-blur-md rounded-full text-white transition-all"
