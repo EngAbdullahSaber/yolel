@@ -309,7 +309,8 @@ export default function AppealsPage() {
                         <div className="px-3 py-1 bg-white/10 backdrop-blur-md rounded-full border border-white/20 text-white text-[10px] font-black tracking-widest uppercase">
                           ID: #{appeal.id}
                         </div>
-                        <div className={`px-4 py-1.5 rounded-full text-xs  font-black shadow-lg border ${getStatusColor(appeal.appealStatus)}`}>
+                        <div className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] font-black shadow-xl backdrop-blur-md border ${getStatusColor(appeal.appealStatus)}`}>
+                          <span className={`w-1.5 h-1.5 rounded-full ${getStatusDot(appeal.appealStatus)} ${appeal.appealStatus.toUpperCase() === 'PENDING' ? 'animate-pulse' : ''}`} />
                           {t(`appeals.status.${appeal.appealStatus}`) || appeal.appealStatus}
                         </div>
                       </div>
