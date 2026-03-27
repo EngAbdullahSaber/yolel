@@ -185,15 +185,24 @@ export default function AppealsPage() {
   };
 
   const getStatusColor = (status: string) => {
-    switch (status.toUpperCase()) {
+    switch (status?.toUpperCase()) {
       case "PENDING":
-        return "bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-400 border-amber-200 dark:border-amber-800";
+        return "bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20 shadow-amber-500/10";
       case "APPROVED":
-        return "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-400 border-emerald-200 dark:border-emerald-800";
+        return "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20 shadow-emerald-500/10";
       case "REJECTED":
-        return "bg-rose-100 text-rose-700 dark:bg-rose-900/40 dark:text-rose-400 border-rose-200 dark:border-rose-800";
+        return "bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500/20 shadow-rose-500/10";
       default:
-        return "bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-400 border-slate-200 dark:border-slate-700";
+        return "bg-slate-500/10 text-slate-600 dark:text-slate-400 border-slate-500/20 shadow-slate-500/10";
+    }
+  };
+
+  const getStatusDot = (status: string) => {
+    switch (status?.toUpperCase()) {
+      case "PENDING": return "bg-amber-500";
+      case "APPROVED": return "bg-emerald-500";
+      case "REJECTED": return "bg-rose-500";
+      default: return "bg-slate-500";
     }
   };
 
@@ -289,7 +298,7 @@ export default function AppealsPage() {
                     {/* Image Area */}
                     <div className="relative aspect-video overflow-hidden">
                       <img
-                        src={appeal.url}
+                        src={import.meta.env.VITE_IMAGE_BASE_URL + appeal.url}
                         alt={`Appeal #${appeal.id}`}
                         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                       />
@@ -300,7 +309,7 @@ export default function AppealsPage() {
                         <div className="px-3 py-1 bg-white/10 backdrop-blur-md rounded-full border border-white/20 text-white text-[10px] font-black tracking-widest uppercase">
                           ID: #{appeal.id}
                         </div>
-                        <div className={`px-4 py-1.5 rounded-full text-xs font-black shadow-lg border ${getStatusColor(appeal.appealStatus)}`}>
+                        <div className={`px-4 py-1.5 rounded-full text-xs  font-black shadow-lg border ${getStatusColor(appeal.appealStatus)}`}>
                           {t(`appeals.status.${appeal.appealStatus}`) || appeal.appealStatus}
                         </div>
                       </div>
@@ -515,9 +524,10 @@ export default function AppealsPage() {
                         </h2>
                         <p className="text-slate-500 font-bold mt-1 tracking-wide">ID: #{selectedAppeal.id}</p>
                     </div>
-                    <span className={`px-6 py-2 rounded-full text-sm font-black border-2 ${getStatusColor(selectedAppeal.appealStatus)}`}>
-                        {selectedAppeal.appealStatus}
-                    </span>
+                    <div className={`flex items-center gap-2.5 px-6 py-2 rounded-full text-xs font-black border backdrop-blur-md shadow-lg ${getStatusColor(selectedAppeal.appealStatus)}`}>
+                        <span className={`w-2 h-2 rounded-full ${getStatusDot(selectedAppeal.appealStatus)} ${selectedAppeal.appealStatus.toUpperCase() === 'PENDING' ? 'animate-pulse' : ''}`} />
+                        {t(`appeals.status.${selectedAppeal.appealStatus}`) || selectedAppeal.appealStatus}
+                    </div>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
