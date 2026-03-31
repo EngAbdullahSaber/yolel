@@ -10,6 +10,8 @@ import {
   User,
   Calendar,
   Percent,
+  Filter,
+  ArrowUpDown,
 } from "lucide-react";
 import { DataTable } from "../../components/shared/DataTable";
 import { Pagination } from "../../components/shared/Pagination";
@@ -49,9 +51,10 @@ export default function VotesPage() {
   const { t, i18n } = useTranslation();
   const lang = i18n.language || "en";
 
-  // Pagination states
+  // Pagination & Filter states
   const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [sort, setSort] = useState("newest");
 
   const formatImageUrl = (url: string) => {
     return import.meta.env.VITE_IMAGE_BASE_URL + url;
@@ -60,9 +63,11 @@ export default function VotesPage() {
   const fetchVotes = async ({
     page,
     pageSize,
+    sortValue,
   }: {
     page: number;
     pageSize: number;
+    sortValue: string;
   }): Promise<{
     data: Vote[];
     total: number;
@@ -76,7 +81,8 @@ export default function VotesPage() {
         page,
         pageSize,
         lang,
-        ""
+        "",
+        { sort: sortValue }
       )) as VotesResponse;
 
       const votes = response.data || [];
@@ -114,11 +120,12 @@ export default function VotesPage() {
     isError,
     refetch,
   } = useQuery({
-    queryKey: ["votes", currentPage, rowsPerPage],
+    queryKey: ["votes", currentPage, rowsPerPage, sort],
     queryFn: () =>
       fetchVotes({
         page: currentPage,
         pageSize: rowsPerPage,
+        sortValue: sort,
       }),
   });
 
@@ -137,6 +144,11 @@ export default function VotesPage() {
 
   const handleRowsPerPageChange = (newRowsPerPage: number) => {
     setRowsPerPage(newRowsPerPage);
+    setCurrentPage(1);
+  };
+
+  const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSort(e.target.value);
     setCurrentPage(1);
   };
 
@@ -159,17 +171,39 @@ export default function VotesPage() {
               </div>
             </div>
 
-            <button
-              onClick={handleRefresh}
-              disabled={isLoading}
-              className="flex items-center gap-2 px-6 py-2.5 bg-slate-700 hover:bg-slate-800 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
-            >
-              <RefreshCw
-                size={18}
-                className={isLoading ? "animate-spin" : ""}
-              />
-              {t("common.refresh")}
-            </button>
+            <div className="flex items-center gap-3">
+              {/* Sort Filter */}
+              <div className="relative">
+                <select
+                  value={sort}
+                  onChange={handleSortChange}
+                  className="appearance-none pl-10 pr-10 py-2.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-bold text-slate-700 dark:text-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-sm cursor-pointer"
+                >
+                  <option value="newest">{t("votes.sort.newest")}</option>
+                  <option value="oldest">{t("votes.sort.oldest")}</option>
+                  <option value="mostInteractions">{t("votes.sort.mostInteractions")}</option>
+                  <option value="leastInteractions">{t("votes.sort.leastInteractions")}</option>
+                </select>
+                <div className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none">
+                  <Filter size={16} />
+                </div>
+                <div className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none">
+                  <ArrowUpDown size={14} />
+                </div>
+              </div>
+
+              <button
+                onClick={handleRefresh}
+                disabled={isLoading}
+                className="flex items-center gap-2 px-6 py-2.5 bg-slate-700 hover:bg-slate-800 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
+              >
+                <RefreshCw
+                  size={18}
+                  className={isLoading ? "animate-spin" : ""}
+                />
+                {t("common.refresh")}
+              </button>
+            </div>
           </div>
  
 

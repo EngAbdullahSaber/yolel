@@ -308,6 +308,12 @@
     "optionTwo": "الخيار 2",
     "totalVotes": "إجمالي الأصوات",
     "votesCount": "أصوات",
+    "sort": {
+      "newest": "الأحدث",
+      "oldest": "الأقدم",
+      "mostInteractions": "الأكثر تفاعلاً",
+      "leastInteractions": "الأقل تفاعلاً"
+    },
     "idBadge": "تصويت",
     "connectionErrorInfo": "تعذر علينا الاتصال بالخادم لجلب بيانات التصويت. يرجى التحقق من اتصالك بالإنترنت."
   },
@@ -582,8 +588,12 @@
       "codePlaceholder": "مثال: SUMMER25",
       "startDate": "تاريخ البدء",
       "endDate": "تاريخ الانتهاء",
-      "discountPercent": "نسبة الخصم",
-      "discountPercentPlaceholder": "0-100",
+      "discountPrice": "سعر الخصم",
+      "discountPricePlaceholder": "مثال: 29.99",
+      "maxUsageLimit": "الحد الأقصى للاستخدام",
+      "maxUsageLimitPlaceholder": "مثال: 100",
+      "subscriptionId": "الاشتراك",
+      "subscriptionPlaceholder": "اختر خطة اشتراك",
       "type": "نوع الخصم",
       "merchantName": "اختر المسوق",
       "merchantNamePlaceholder": "اختر المسوق ",
@@ -601,8 +611,9 @@
       "singleDate": "التاريخ"
     },
     "types": {
-      "ONLINE_DISCOUNT": "خصم عبر الإنترنت",
-      "SYSTEM": "نظام"
+      "ANDROID": "أندرويد",
+      "IOS": "آيفون",
+      "ALL": "جميع المنصات"
     },
     "copySuccess": "تم نسخ الرمز إلى الحافظة",
     "active": "نشط",

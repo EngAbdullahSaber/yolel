@@ -35,28 +35,26 @@ export default function UpdatePromoCodePage() {
   const user = getUserData();
   const isMerchant = user?.role?.toUpperCase() === "MERCHANT";
   const merchantId = user?.id;
-console.log(user)
-  // Fetch merchants for the dropdown
-  const { data: merchantsData } = useQuery<MerchantsResponse>({
-    queryKey: ["merchants-all"],
-    queryFn: () => GetPanigationMethod("user/merchant/all", 1, 1000, lang, ""),
-    enabled: !isMerchant, // Don't fetch if user is a merchant
-  });
 
-  const merchants = merchantsData?.data || [];
+  const fetchOptions = async (endpoint: string, params: any) => {
+    const { page, pageSize, name, ...rest } = params;
+    return GetPanigationMethod(endpoint, page, pageSize, lang, name || "", rest);
+  };
 
   useEffect(() => {
     const fetchPromoCode = async () => {
       try {
         const result = await GetSpecifiedMethod(`promo-code/${id}`, lang);
         if (result && result.data) {
-          // Format dates for the date input (YYYY-MM-DD or YYYY-MM-DDTHH:mm)
+          // Format dates for the date input (YYYY-MM-DD)
           const data = result.data;
           setInitialData({
             ...data,
             startDate: data.startDate ? new Date(data.startDate).toISOString().split('T')[0] : "",
             endDate: data.endDate ? new Date(data.endDate).toISOString().split('T')[0] : "",
-            discountPercent: Number(data.discountPercent),
+            discountPrice: Number(data.discountPrice || 0),
+            maxUsageLimit: Number(data.maxUsageLimit || 100),
+            subscriptionId: data.subscriptionId?.toString() || (data.subscription?.id?.toString() || ""),
             merchantId: data.merchantId ? data.merchantId.toString() : (data.merchant?.id ? data.merchant.id.toString() : "")
           });
         } else {
@@ -94,10 +92,11 @@ console.log(user)
       icon: <Type size={18} />,
       cols: 6 as any,
       options: [
-        { label: t("promoCodes.types.ONLINE_DISCOUNT"), value: "ONLINE_DISCOUNT" },
-        { label: t("promoCodes.types.SYSTEM"), value: "SYSTEM" },
+        { label: t("promoCodes.types.ANDROID"), value: "ANDROID" },
+        { label: t("promoCodes.types.IOS"), value: "IOS" },
+        { label: t("promoCodes.types.ALL"), value: "ALL" },
       ],
-      validation: z.enum(["ONLINE_DISCOUNT", "SYSTEM"]),
+      validation: z.enum(["ANDROID", "IOS", "ALL"]),
     },
     {
       name: "startDate",
@@ -118,28 +117,62 @@ console.log(user)
       validation: z.string().min(1, t("common.isRequired")),
     },
     {
-      name: "discountPercent",
-      label: t("promoCodes.form.discountPercent"),
+      name: "discountPrice",
+      label: t("promoCodes.form.discountPrice"),
       type: "number" as FieldType,
-      placeholder: t("promoCodes.form.discountPercentPlaceholder"),
+      placeholder: t("promoCodes.form.discountPricePlaceholder"),
       required: true,
       icon: <Percent size={18} />,
       cols: 6 as any,
-      validation: z.coerce.number().min(0).max(100),
+      validation: z.coerce.number().min(0),
+    },
+    {
+      name: "maxUsageLimit",
+      label: t("promoCodes.form.maxUsageLimit"),
+      type: "number" as FieldType,
+      placeholder: t("promoCodes.form.maxUsageLimitPlaceholder"),
+      required: true,
+      icon: <Tag size={18} />,
+      cols: 6 as any,
+      validation: z.coerce.number().min(1),
+    },
+    {
+      name: "subscriptionId",
+      label: t("promoCodes.form.subscriptionId"),
+      type: "paginatedSelect" as FieldType,
+      placeholder: t("promoCodes.form.subscriptionPlaceholder"),
+      required: true,
+      icon: <Calendar size={18} />,
+      cols: 6 as any,
+      paginatedSelectConfig: {
+        endpoint: "app-subscription",
+        labelKey: "type",
+        valueKey: "id",
+        pageSize: 10,
+        transformResponse: (data: any[]) => 
+          data.map((s: any) => ({
+            label: `${t(`subscriptions.types.${s.type}`)} - ${t(`subscriptions.payTypes.${s.payType}`)}`,
+            value: s.id
+          }))
+      },
+      validation: z.any().refine(val => !!val, t("common.isRequired")),
     },
     // Merchant ID
     {
       name: "merchantId",
       label: t("promoCodes.form.merchantName"),
-      type: "select" as FieldType,
+      type: "paginatedSelect" as FieldType,
       placeholder: t("promoCodes.form.merchantNamePlaceholder"),
       required: false,
       icon: <Store size={18} />,
       cols: 6 as any,
-      options: [
-        { label: t("common.all") || "Select Merchant", value: "" },
-        ...merchants.map((m) => ({ label: m.name, value: m.id.toString() }))
-      ],
+      paginatedSelectConfig: {
+        endpoint: "user/merchant/all",
+        labelKey: "name",
+        valueKey: "id",
+        searchParam: "name",
+        pageSize: 10,
+      },
     },
   ].filter(field => !isMerchant || field.name !== "merchantId");
 
@@ -156,17 +189,15 @@ console.log(user)
       }
 
       const requestData = {
-        ...data,
+        code: data.code,
+        type: data.type,
         startDate: new Date(data.startDate).toISOString(),
         endDate: new Date(data.endDate).toISOString(),
-        discountPercent: Number(data.discountPercent),
-        merchantId: data.merchantId ? Number(data.merchantId) : merchantId,
+        discountPrice: Number(data.discountPrice),
+        maxUsageLimit: Number(data.maxUsageLimit),
+        subscriptionId: Number(data.subscriptionId),
+        merchantId: data.merchantId ? Number(data.merchantId) : null,
       };
-
-      // Remove merchantName just in case
-      delete requestData.merchantName;
-      // Also remove merchant object if it exists from initial data spreading
-      delete requestData.merchant;
 
       const result = await UpdateMethod("promo-code", requestData, id, lang);
 
@@ -236,11 +267,9 @@ console.log(user)
           cancelLabel={t("common.cancel")}
           isLoading={isLoading}
           mode="edit"
+          fetchOptions={fetchOptions}
           customValidation={(data) => {
             const errors: any = {};
-            if (data.type === "ONLINE_DISCOUNT" && Number(data.discountPercent) >= 100) {
-              errors.discountPercent = t("promoCodes.form.discountValidation");
-            }
             return errors;
           }}
           className="bg-white/70 dark:bg-slate-800/70 backdrop-blur-xl border-white/20 dark:border-slate-700/50 shadow-2xl rounded-[2.5rem]"

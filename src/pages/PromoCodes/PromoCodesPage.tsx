@@ -30,9 +30,20 @@ interface PromoCode {
   code: string;
   startDate: string;
   endDate: string;
-  discountPercent: string;
+  discountPrice: string | number;
+  maxUsageLimit: number;
   type: string;
-  merchantName: string;
+  merchant?: {
+    id: number;
+    name: string;
+    email: string;
+  };
+  subscription?: {
+    id: number;
+    type: string;
+    payType: string;
+    price: string | null;
+  };
   createdAt: string;
   updatedAt: string;
   _count?: {
@@ -264,11 +275,18 @@ export default function PromoCodesPage() {
                           <Store size={24} />
                         </div>
                         <div>
-                          <h3 className="text-lg font-black text-slate-900 dark:text-white mb-1">{promo.merchantName}</h3>
+                          <h3 className="text-lg font-black text-slate-900 dark:text-white mb-1">
+                            {promo.merchant?.name || t("common.system")}
+                          </h3>
                           <div className="flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400 font-black">
-                            <Percent size={18} />
-                            <span className="text-2xl">{promo.discountPercent}% OFF</span>
+                            <Tag size={18} />
+                            <span className="text-2xl">${promo.discountPrice} OFF</span>
                           </div>
+                          {promo.subscription && (
+                            <div className="text-[10px] text-slate-500 font-bold uppercase tracking-wider mt-1">
+                              {t(`subscriptions.types.${promo.subscription.type}`)} - {t(`subscriptions.payTypes.${promo.subscription.payType}`)}
+                            </div>
+                          )}
                         </div>
                       </div>
 

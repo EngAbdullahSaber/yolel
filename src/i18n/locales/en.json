@@ -308,6 +308,12 @@
     "optionTwo": "Option 2",
     "totalVotes": "Total Votes",
     "votesCount": "Votes",
+    "sort": {
+      "newest": "Newest",
+      "oldest": "Oldest",
+      "mostInteractions": "Most Interactions",
+      "leastInteractions": "Least Interactions"
+    },
     "idBadge": "Vote",
     "connectionErrorInfo": "We couldn't reach the server to fetch the votes data. Please check your connection."
   },
@@ -582,8 +588,12 @@
       "codePlaceholder": "e.g. PARTNER20",
       "startDate": "Start Date",
       "endDate": "End Date",
-      "discountPercent": "Discount Percentage",
-      "discountPercentPlaceholder": "0-100",
+      "discountPrice": "Discount Price",
+      "discountPricePlaceholder": "e.g. 29.99",
+      "maxUsageLimit": "Max Usage Limit",
+      "maxUsageLimitPlaceholder": "e.g. 100",
+      "subscriptionId": "Subscription",
+      "subscriptionPlaceholder": "Select a subscription plan",
       "type": "Promo Type",
       "merchantName": "Select Merchant",
       "merchantNamePlaceholder": "Choose a merchant",
@@ -601,8 +611,9 @@
       "singleDate": "Date"
     },
     "types": {
-      "ONLINE_DISCOUNT": "Online Discount",
-      "SYSTEM": "System"
+      "ANDROID": "Android",
+      "IOS": "iOS",
+      "ALL": "All Platforms"
     },
     "copySuccess": "Code copied to clipboard",
     "active": "Active",
