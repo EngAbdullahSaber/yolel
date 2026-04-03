@@ -72,6 +72,7 @@
     "password": "Password",
     "confirmPassword": "Confirm Password",
     "name": "Name",
+    "user": "User",
     "save": "Save",
     "cancel": "Cancel",
     "delete": "Delete",
@@ -90,6 +91,7 @@
     "upload": "Upload",
     "loading": "Loading...",
     "success": "Success",
+    "deleteSuccess": "Deleted successfully",
     "error": "Error",
     "warning": "Warning",
     "info": "Info",
@@ -173,6 +175,7 @@
     "contactNumber": "Contact Number",
     "reports": "Reports",
     "subscriptions": "Subscriptions",
+    "userSubscriptions": "User Subscriptions",
     "promoCodes": "Promo Codes",
     "charts": "Charts",
     "forms": "Forms",
@@ -187,6 +190,7 @@
     "terms": "Terms & Conditions",
     "termsSubtitle": "Manage Terms and Conditions Content",
     "deletedImages": "Deleted Images",
+    "refusedImages": "Refused Images",
     "appeals": "Appeals",
     "notifications": "Notifications"
   },
@@ -343,7 +347,8 @@
       "youth": "Youth",
       "teenager": "Teenager",
       "old": "Old",
-      "child": "Child"
+      "child": "Child",
+      "32": "32 Years Old"
     },
     "gender": {
       "male": "Male",
@@ -442,6 +447,27 @@
       "interactionCount": "Interactions",
       "winCount": "Wins"
     }
+  },
+  "refusedImages": {
+    "title": "Refused Images",
+    "subtitle": "Review and manage images that were refused by the vision service",
+    "fetchingData": "Fetching refused images...",
+    "noImagesFound": "No refused images found",
+    "totalItems": "Refused Images",
+    "table": {
+      "refusedAt": "Refused At",
+      "user": "User",
+      "reason": "Refusal Reason",
+      "gender": "Gender",
+      "ageType": "Age"
+    },
+    "badge": "REFUSED IMAGE",
+    "anonymous": "Anonymous User",
+    "deleteTitle": "Delete Refused Image",
+    "deleteDescription": "Are you sure you want to permanently delete this refused image? This action cannot be undone.",
+    "acceptTitle": "Accept Image",
+    "acceptDescription": "Are you sure you want to accept this image? It will be moved to the active admin images.",
+    "acceptSuccess": "Image accepted successfully"
   },
   "contactUs": {
     "title": "Contact Messages",

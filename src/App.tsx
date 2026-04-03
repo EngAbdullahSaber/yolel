@@ -26,6 +26,7 @@ import VotesPage from "./pages/Votes/VotesPage";
 import AdminImagesPage from "./pages/AdminImages/AdminImagesPage";
 import CreateAdminImagePage from "./pages/AdminImages/CreateAdminImagePage";
 import DeletedImagesPage from "./pages/AdminImages/DeletedImagesPage";
+import RefusedImagesPage from "./pages/AdminImages/RefusedImagesPage";
 import UsersPage from "./pages/users/UsersPage";
 import SubAdminsPage from "./pages/SubAdmins/SubAdminsPage";
 import CreateSubAdminPage from "./pages/SubAdmins/CreateSubAdminPage";
@@ -88,6 +89,7 @@ export default function App() {
             <Route path="admin-images" element={<AdminImagesPage />} />
             <Route path="admin-images/create" element={<CreateAdminImagePage />} />
             <Route path="admin-images/deleted" element={<DeletedImagesPage />} />
+            <Route path="admin-images/refused" element={<RefusedImagesPage />} />
             <Route path="admin-images/level" element={<ImageLevelPage />} />
             <Route path="users" element={<UsersPage />} />
             <Route path="subadmins" element={<SubAdminsPage />} />

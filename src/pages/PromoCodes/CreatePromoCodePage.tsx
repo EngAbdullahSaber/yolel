@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { FormField } from "../../components/shared/GenericForm";
 import { z } from "zod";
-import { Tag, Calendar, Percent, Store, Type, ArrowLeft } from "lucide-react";
+import { Tag, Calendar, Store, Type, ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { CreateMethod, GetPanigationMethod } from "../../services/apis/ApiMethod";
 import { useToast } from "../../hooks/useToast";
@@ -95,7 +95,7 @@ export default function CreatePromoCodePage() {
       type: "number" as FieldType,
       placeholder: t("promoCodes.form.discountPricePlaceholder"),
       required: true,
-      icon: <Percent size={18} />,
+      icon: <Tag size={18} />,
       cols: 6 as any,
       validation: z.coerce.number().min(0),
     },
@@ -126,7 +126,7 @@ export default function CreatePromoCodePage() {
         pageSize: 10,
         transformResponse: (data: any[]) => 
           data.map((s: any) => ({
-            label: `${t(`subscriptions.types.${s.type}`)} - ${t(`subscriptions.payTypes.${s.payType}`)}`,
+            label: `${t(`subscriptions.types.${s.type}`)} - ${t(`subscriptions.payTypes.${s.payType}`)} (${s.price || 0} $)`,
             value: s.id
           }))
       },

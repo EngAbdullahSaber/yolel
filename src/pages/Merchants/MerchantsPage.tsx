@@ -18,7 +18,7 @@ import {
   Unlock,
 } from "lucide-react";
 import { DataTable } from "../../components/shared/DataTable";
-import { GetPanigationMethod, UpdateMethod } from "../../services/apis/ApiMethod";
+import { GetPanigationMethod, GetPanigationMethod1, UpdateMethod } from "../../services/apis/ApiMethod";
 import { useTranslation } from "react-i18next";
 import PageMeta from "../../components/common/PageMeta";
 import { toast } from "react-hot-toast";
@@ -84,7 +84,7 @@ export default function MerchantsPage() {
       if (statusFilter === "Blocked") additionalParams.isBlocked = true;
       if (statusFilter === "UnBlocked") additionalParams.isBlocked = false;
       
-      return GetPanigationMethod(
+      return GetPanigationMethod1(
         "user/merchant/all",
         currentPage,
         rowsPerPage,
@@ -244,13 +244,13 @@ export default function MerchantsPage() {
         </div>
 
         {/* Filter Bar */}
-        <div className="bg-white dark:bg-slate-800 rounded-[2rem] p-3 shadow-xl shadow-slate-200/50 dark:shadow-none border border-slate-100 dark:border-slate-700 flex flex-col md:flex-row items-center gap-4">
+        <div className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-[2.5rem] p-3 shadow-2xl shadow-indigo-500/5 border border-slate-200/60 dark:border-slate-700/50 flex flex-col md:flex-row items-center gap-4 transition-all duration-500">
           <div className="relative flex-1 group w-full">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-indigo-500 transition-colors" size={18} />
+            <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-indigo-500 transition-all duration-300" size={20} />
             <input 
               type="text"
               placeholder={t("merchants.page.searchPlaceholder") || "Search merchants..."}
-              className="w-full pl-12 pr-4 py-3.5 bg-slate-50 dark:bg-slate-900/50 border border-slate-100 dark:border-slate-800 rounded-2xl text-sm font-bold focus:outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all"
+              className="w-full pl-14 pr-6 py-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-[2rem] text-sm font-bold text-slate-700 dark:text-slate-200 placeholder:text-slate-400/70 focus:outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500/50 transition-all duration-300 shadow-sm"
               value={searchTerm}
               onChange={(e) => {
                 setSearchTerm(e.target.value);
@@ -259,12 +259,12 @@ export default function MerchantsPage() {
             />
           </div>
           
-          <div className="flex items-center gap-2 p-1.5 bg-slate-50 dark:bg-slate-900/50 border border-slate-100 dark:border-slate-800 rounded-2xl w-full md:w-auto">
-            <div className="px-3 py-2 text-xs font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
-              <Filter size={14} />
+          <div className="flex items-center gap-2 p-1.5 bg-slate-50/50 dark:bg-slate-900/50 border border-slate-200/50 dark:border-slate-700/50 rounded-[2rem] w-full md:w-auto">
+            <div className="px-4 py-2 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] flex items-center gap-2 border-r border-slate-200 dark:border-slate-700/50 mr-1">
+              <Filter size={14} className="text-indigo-500" />
               {t("common.status")}
             </div>
-            <div className="flex gap-1">
+            <div className="flex gap-1 pr-1">
               {["all", "Blocked", "UnBlocked"].map((status) => (
                 <button
                   key={status}
@@ -272,10 +272,10 @@ export default function MerchantsPage() {
                     setStatusFilter(status);
                     setCurrentPage(1);
                   }}
-                  className={`px-4 py-2 rounded-xl text-xs font-black transition-all duration-300 ${
+                  className={`px-5 py-2.5 rounded-[1.25rem] text-[11px] font-black transition-all duration-300 uppercase tracking-wider ${
                     statusFilter === status
-                      ? "bg-white dark:bg-slate-800 text-indigo-600 shadow-sm border border-slate-100 dark:border-slate-700"
-                      : "text-slate-500 hover:text-slate-700 dark:hover:text-slate-300"
+                      ? "bg-white dark:bg-slate-800 text-indigo-600 shadow-md border border-slate-200 dark:border-slate-700 scale-100"
+                      : "text-slate-500 hover:text-indigo-500 dark:hover:text-indigo-400 hover:bg-white/50 dark:hover:bg-slate-800/50"
                   }`}
                 >
                   {status === "all" ? t("common.all") : t(`common.${status.toLowerCase()}`)}

@@ -30,6 +30,7 @@ import {
   FiBarChart,
   FiBell,
   FiPhone,
+  FiAlertCircle,
 } from "react-icons/fi";
 import { Filter, History as HistoryIcon } from "lucide-react";
 
@@ -201,6 +202,11 @@ const AppSidebar: React.FC = () => {
       icon: <HistoryIcon className="w-5 h-5" />,
       name: t("sidebar.deletedImages"),
       path: "/admin-images/deleted",
+    },
+    {
+      icon: <FiAlertCircle className="w-5 h-5" />,
+      name: t("sidebar.refusedImages"),
+      path: "/admin-images/refused",
     },
     {
       icon: <FiUsers className="w-5 h-5" />,

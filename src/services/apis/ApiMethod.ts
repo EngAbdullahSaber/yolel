@@ -29,6 +29,35 @@ export async function GetPanigationMethod(
   if (res) return res.data;
   else return false;
 }
+export async function GetPanigationMethod1(
+  url: any,
+  page: any,
+  pageSize: any,
+  lang: any,
+  searchTerm: any,
+  additionalParams?: any
+) {
+  // Build query parameters
+  const params = new URLSearchParams({
+    page: page.toString(),
+    pageSize: pageSize.toString(),
+    ...additionalParams,
+  });
+
+  // Only add search term if it's provided and not empty
+  if (searchTerm && searchTerm.trim() !== "") {
+    params.append("email", searchTerm.trim());
+  }
+
+  let res = await api.get(`${url}?${params.toString()}`, {
+    headers: {
+      lang: lang,
+    },
+  });
+
+  if (res) return res.data;
+  else return false;
+}
 export const GetPanigationMethodWithFilter = async (
   endpoint: string,
   page: number,
