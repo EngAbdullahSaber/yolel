@@ -31,6 +31,7 @@ export default function UpdatePromoCodePage() {
   const [isLoading, setIsLoading] = useState(false);
   const [isFetching, setIsFetching] = useState(true);
   const [initialData, setInitialData] = useState<any>(null);
+  const [promoType, setPromoType] = useState<string>("ANDROID");
 
   const user = getUserData();
   const isMerchant = user?.role?.toUpperCase() === "MERCHANT";
@@ -55,8 +56,12 @@ export default function UpdatePromoCodePage() {
             discountPrice: Number(data.discountPrice || 0),
             maxUsageLimit: Number(data.maxUsageLimit || 100),
             subscriptionId: data.subscriptionId?.toString() || (data.subscription?.id?.toString() || ""),
-            merchantId: data.merchantId ? data.merchantId.toString() : (data.merchant?.id ? data.merchant.id.toString() : "")
+            merchantId: data.merchantId ? data.merchantId.toString() : (data.merchant?.id ? data.merchant.id.toString() : ""),
+            offerId: data.offerId || ""
           });
+          if (data.type) {
+            setPromoType(data.type);
+          }
         } else {
           toast.error(t("promoCodes.form.error"));
           navigate("/promo-codes");
@@ -98,6 +103,21 @@ export default function UpdatePromoCodePage() {
       ],
       validation: z.enum(["ANDROID", "IOS", "ALL"]),
     },
+    // Offer ID (Shown when type is ALL or ANDROID)
+    ...(promoType === "ALL" || promoType === "ANDROID"
+      ? [
+          {
+            name: "offerId",
+            label: t("promoCodes.form.offerId"),
+            type: "text" as FieldType,
+            placeholder: t("promoCodes.form.offerIdPlaceholder"),
+            required: true,
+            icon: <Tag size={18} />,
+            cols: 6 as any,
+            validation: z.string().min(1, t("common.isRequired")),
+          },
+        ]
+      : []),
     {
       name: "startDate",
       label: t("promoCodes.form.startDate"),
@@ -115,28 +135,7 @@ export default function UpdatePromoCodePage() {
       icon: <Calendar size={18} />,
       cols: 6 as any,
       validation: z.string().min(1, t("common.isRequired")),
-    },
-    {
-      name: "discountPrice",
-      label: t("promoCodes.form.discountPrice"),
-      type: "number" as FieldType,
-      placeholder: t("promoCodes.form.discountPricePlaceholder"),
-      required: true,
-      icon: <Tag size={18} />,
-      cols: 6 as any,
-      validation: z.coerce.number().min(0),
-    },
-    {
-      name: "maxUsageLimit",
-      label: t("promoCodes.form.maxUsageLimit"),
-      type: "number" as FieldType,
-      placeholder: t("promoCodes.form.maxUsageLimitPlaceholder"),
-      required: true,
-      icon: <Tag size={18} />,
-      cols: 6 as any,
-      validation: z.coerce.number().min(1),
-    },
-    {
+    }, {
       name: "subscriptionId",
       label: t("promoCodes.form.subscriptionId"),
       type: "paginatedSelect" as FieldType,
@@ -174,6 +173,27 @@ export default function UpdatePromoCodePage() {
         pageSize: 10,
       },
     },
+    {
+      name: "discountPrice",
+      label: t("promoCodes.form.discountPrice"),
+      type: "number" as FieldType,
+      placeholder: t("promoCodes.form.discountPricePlaceholder"),
+      required: true,
+      icon: <Tag size={18} />,
+      cols: 6 as any,
+      validation: z.coerce.number().min(0),
+    },
+    {
+      name: "maxUsageLimit",
+      label: t("promoCodes.form.maxUsageLimit"),
+      type: "number" as FieldType,
+      placeholder: t("promoCodes.form.maxUsageLimitPlaceholder"),
+      required: true,
+      icon: <Tag size={18} />,
+      cols: 6 as any,
+      validation: z.coerce.number().min(1),
+    },
+   
   ].filter(field => !isMerchant || field.name !== "merchantId");
 
   const handleSubmit = async (data: any) => {
@@ -197,6 +217,7 @@ export default function UpdatePromoCodePage() {
         maxUsageLimit: Number(data.maxUsageLimit),
         subscriptionId: Number(data.subscriptionId),
         merchantId: data.merchantId ? Number(data.merchantId) : null,
+        offerId: (data.type === "ALL" || data.type === "ANDROID") ? data.offerId : null,
       };
 
       const result = await UpdateMethod("promo-code", requestData, id, lang);
@@ -263,6 +284,11 @@ export default function UpdatePromoCodePage() {
           defaultValues={initialData}
           onSubmit={handleSubmit}
           onCancel={() => navigate("/promo-codes")}
+          onFieldChange={(fieldName, value) => {
+            if (fieldName === "type") {
+              setPromoType(value);
+            }
+          }}
           submitLabel={t("promoCodes.form.submitUpdate")}
           cancelLabel={t("common.cancel")}
           isLoading={isLoading}

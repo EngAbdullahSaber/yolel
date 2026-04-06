@@ -11,7 +11,7 @@ export async function GetPanigationMethod(
   // Build query parameters
   const params = new URLSearchParams({
     page: page.toString(),
-    pageSize: pageSize.toString(),
+    limit: pageSize.toString(),
     ...additionalParams,
   });
 
@@ -40,7 +40,7 @@ export async function GetPanigationMethod1(
   // Build query parameters
   const params = new URLSearchParams({
     page: page.toString(),
-    pageSize: pageSize.toString(),
+    limit: pageSize.toString(),
     ...additionalParams,
   });
 
@@ -68,7 +68,7 @@ export const GetPanigationMethodWithFilter = async (
 ) => {
   const params = new URLSearchParams({
     page: page.toString(),
-    pageSize: pageSize.toString(),
+    limit: pageSize.toString(),
     ...(searchTerm && { email: searchTerm }),
     ...additionalParams,
   });

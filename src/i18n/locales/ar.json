@@ -622,6 +622,8 @@
       "subscriptionId": "الاشتراك",
       "subscriptionPlaceholder": "اختر خطة اشتراك",
       "type": "نوع الخصم",
+      "offerId": "رقم العرض",
+      "offerIdPlaceholder": "مثال: OFFER-123456",
       "merchantName": "اختر المسوق",
       "merchantNamePlaceholder": "اختر المسوق ",
       "submit": "إنشاء الرمز الترويجي",

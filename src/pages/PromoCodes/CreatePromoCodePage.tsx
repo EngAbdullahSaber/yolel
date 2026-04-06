@@ -28,6 +28,7 @@ export default function CreatePromoCodePage() {
   const lang = i18n.language || "en";
 
   const [isLoading, setIsLoading] = useState(false);
+  const [promoType, setPromoType] = useState<string>("ANDROID");
   
   const user = getUserData();
   const isMerchant = user?.role?.toUpperCase() === "MERCHANT";
@@ -68,6 +69,21 @@ export default function CreatePromoCodePage() {
       ],
       validation: z.enum(["ANDROID", "IOS", "ALL"]),
     },
+    // Offer ID (Shown when type is ALL or ANDROID)
+    ...(promoType === "ALL" || promoType === "ANDROID"
+      ? [
+          {
+            name: "offerId",
+            label: t("promoCodes.form.offerId"),
+            type: "text" as FieldType,
+            placeholder: t("promoCodes.form.offerIdPlaceholder"),
+            required: true,
+            icon: <Tag size={18} />,
+            cols: 6 as any,
+            validation: z.string().min(1, t("common.isRequired")),
+          },
+        ]
+      : []),
     // Start Date
     {
       name: "startDate",
@@ -87,30 +103,7 @@ export default function CreatePromoCodePage() {
       icon: <Calendar size={18} />,
       cols: 6 as any,
       validation: z.string().min(1, t("common.isRequired")),
-    },
-    // Discount Price
-    {
-      name: "discountPrice",
-      label: t("promoCodes.form.discountPrice"),
-      type: "number" as FieldType,
-      placeholder: t("promoCodes.form.discountPricePlaceholder"),
-      required: true,
-      icon: <Tag size={18} />,
-      cols: 6 as any,
-      validation: z.coerce.number().min(0),
-    },
-    // Max Usage Limit
-    {
-      name: "maxUsageLimit",
-      label: t("promoCodes.form.maxUsageLimit"),
-      type: "number" as FieldType,
-      placeholder: t("promoCodes.form.maxUsageLimitPlaceholder"),
-      required: true,
-      icon: <Tag size={18} />,
-      cols: 6 as any,
-      validation: z.coerce.number().min(1),
-    },
-    // Subscription ID
+    },  // Subscription ID
     {
       name: "subscriptionId",
       label: t("promoCodes.form.subscriptionId"),
@@ -149,6 +142,29 @@ export default function CreatePromoCodePage() {
         pageSize: 10,
       },
     },
+    // Discount Price
+    {
+      name: "discountPrice",
+      label: t("promoCodes.form.discountPrice"),
+      type: "number" as FieldType,
+      placeholder: t("promoCodes.form.discountPricePlaceholder"),
+      required: true,
+      icon: <Tag size={18} />,
+      cols: 6 as any,
+      validation: z.coerce.number().min(0),
+    },
+    // Max Usage Limit
+    {
+      name: "maxUsageLimit",
+      label: t("promoCodes.form.maxUsageLimit"),
+      type: "number" as FieldType,
+      placeholder: t("promoCodes.form.maxUsageLimitPlaceholder"),
+      required: true,
+      icon: <Tag size={18} />,
+      cols: 6 as any,
+      validation: z.coerce.number().min(1),
+    },
+  
   ].filter(field => !isMerchant || field.name !== "merchantId");
 
   const defaultValues = {
@@ -160,6 +176,7 @@ export default function CreatePromoCodePage() {
     maxUsageLimit: 100,
     subscriptionId: "",
     merchantId: isMerchant ? (merchantId?.toString() || "") : "",
+    offerId: "",
   };
 
   const handleSubmit = async (data: any) => {
@@ -185,6 +202,7 @@ export default function CreatePromoCodePage() {
         maxUsageLimit: Number(data.maxUsageLimit),
         subscriptionId: Number(data.subscriptionId),
         merchantId: data.merchantId ? Number(data.merchantId) : null,
+        offerId: (data.type === "ALL" || data.type === "ANDROID") ? data.offerId : null,
       };
       
       const result = await CreateMethod("promo-code", requestData, lang);
@@ -250,6 +268,11 @@ export default function CreatePromoCodePage() {
           defaultValues={defaultValues}
           onSubmit={handleSubmit}
           onCancel={() => navigate("/promo-codes")}
+          onFieldChange={(fieldName, value) => {
+            if (fieldName === "type") {
+              setPromoType(value);
+            }
+          }}
           submitLabel={t("promoCodes.form.submit")}
           cancelLabel={t("common.cancel")}
           isLoading={isLoading}

@@ -621,6 +621,8 @@
       "subscriptionId": "Subscription",
       "subscriptionPlaceholder": "Select a subscription plan",
       "type": "Promo Type",
+      "offerId": "Offer ID",
+      "offerIdPlaceholder": "e.g. OFFER-123456",
       "merchantName": "Select Merchant",
       "merchantNamePlaceholder": "Choose a merchant",
       "submit": "Create Promo Code",

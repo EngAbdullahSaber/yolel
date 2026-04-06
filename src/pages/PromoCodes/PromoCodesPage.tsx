@@ -31,6 +31,8 @@ interface PromoCode {
   startDate: string;
   endDate: string;
   discountPrice: string | number;
+  discountPercentage?: number;
+  offerId?: string | null;
   maxUsageLimit: number;
   type: string;
   merchant?: {
@@ -280,7 +282,11 @@ export default function PromoCodesPage() {
                           </h3>
                           <div className="flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400 font-black">
                             <Tag size={18} />
-                            <span className="text-2xl">${promo.discountPrice} OFF</span>
+                            <span className="text-2xl">
+                              {promo.discountPercentage 
+                                ? `${promo.discountPercentage}% OFF` 
+                                : `$${promo.discountPrice} OFF`}
+                            </span>
                           </div>
                           {promo.subscription && (
                             <div className="text-[10px] text-slate-500 font-bold uppercase tracking-wider mt-1">
@@ -337,22 +343,35 @@ export default function PromoCodesPage() {
                           </div>
                         </div>
 
-                        <div className="flex items-center justify-between pt-4 border-t border-slate-100 dark:border-slate-700">
-                           <div className="flex items-center gap-2 text-[11px] text-slate-400 font-black uppercase">
-                             <Clock size={14} />
-                             {t(`promoCodes.types.${promo.type}`)}
+                        <div className="pt-4 border-t border-slate-100 dark:border-slate-700 space-y-3">
+                           <div className="flex items-center justify-between gap-4">
+                               <div className="flex items-center gap-3">
+                                   <div className="flex items-center gap-1.5 text-[10px] text-slate-400 font-black uppercase bg-slate-50 dark:bg-slate-900/50 px-2 py-1 rounded-lg border border-slate-100 dark:border-slate-800/50">
+                                       <Clock size={12} className="text-blue-500" />
+                                       {t(`promoCodes.types.${promo.type}`)}
+                                   </div>
+                                   <div className="flex items-center gap-1.5 text-[10px] text-slate-400 font-black uppercase bg-slate-50 dark:bg-slate-900/50 px-2 py-1 rounded-lg border border-slate-100 dark:border-slate-800/50">
+                                       <Tag size={12} className="text-emerald-500" />
+                                       <span>{t("promoCodes.table.usages")}: {promo._count?.usages || 0}</span>
+                                   </div>
+                               </div>
+                               <Link 
+                                 to={`/promo-codes/edit/${promo.id}`}
+                                 className="flex items-center gap-1 text-[11px] text-emerald-600 dark:text-emerald-400 font-black uppercase hover:underline"
+                               >
+                                 {t("common.edit")}
+                                 <ExternalLink size={12} />
+                               </Link>
                            </div>
-                           <div className="flex items-center gap-2 text-[11px] text-slate-400 font-black uppercase">
-                             <Tag size={14} className="text-emerald-500" />
-                             <span>{t("promoCodes.table.usages")}: {promo._count?.usages || 0}</span>
-                           </div>
-                           <Link 
-                             to={`/promo-codes/edit/${promo.id}`}
-                             className="flex items-center gap-1 text-[11px] text-emerald-600 dark:text-emerald-400 font-black uppercase hover:underline"
-                           >
-                             {t("common.edit")}
-                             <ExternalLink size={12} />
-                           </Link>
+
+                           {promo.offerId && (
+                             <div className="flex items-center gap-2.5 p-2.5 bg-blue-50/50 dark:bg-blue-950/30 border border-blue-100/50 dark:border-blue-900/30 rounded-xl overflow-hidden group/id">
+                               <Tag size={14} className="text-blue-600 dark:text-blue-400 flex-shrink-0" />
+                               <span className="text-[10px] font-black text-blue-700 dark:text-blue-300 uppercase tracking-widest truncate" title={promo.offerId}>
+                                 ID: {promo.offerId}
+                               </span>
+                             </div>
+                           )}
                         </div>
                       </div>
                     </div>
