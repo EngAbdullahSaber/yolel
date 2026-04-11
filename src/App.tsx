@@ -44,6 +44,7 @@ import MerchantsPage from "./pages/Merchants/MerchantsPage";
 import CreateMerchantPage from "./pages/Merchants/CreateMerchantPage";
 import NotificationsPage from "./pages/Notifications/NotificationsPage";
 import ContactNumberPage from "./pages/StaticPages/ContactNumberPage";
+import AdminSettings from "./pages/AdminProfile/AdminSettings";
 
 export default function App() {
   useLanguage();
@@ -107,6 +108,7 @@ export default function App() {
             <Route path="appeals" element={<AppealsPage />} />
             <Route path="notifications" element={<NotificationsPage />} />
             <Route path="contact-number" element={<ContactNumberPage />} />
+            <Route path="settings" element={<AdminSettings />} />
 
         
             <Route path="alerts" element={<Alerts />} />

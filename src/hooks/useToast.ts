@@ -44,10 +44,18 @@ export const useToast = () => {
     });
   };
 
+  const info = (message: string, options = {}) => {
+    return toast(message, {
+      duration: 1500,
+      ...options,
+    });
+  };
+
   return {
     success,
     error,
     loading,
+    info,
     custom,
     dismiss,
     dismissAll,

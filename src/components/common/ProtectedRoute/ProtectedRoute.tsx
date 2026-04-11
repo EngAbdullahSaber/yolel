@@ -2,7 +2,11 @@ import { useEffect, useState } from "react";
 import { Navigate, useLocation } from "react-router-dom";
 import { getUserData } from "../../../services/utils";
 
-export const ProtectedRoute = ({ children }) => {
+interface RouteProps {
+  children: React.ReactNode;
+}
+
+export const ProtectedRoute = ({ children }: RouteProps) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const location = useLocation();
@@ -22,7 +26,7 @@ export const ProtectedRoute = ({ children }) => {
     checkAuth();
 
     // Listen for logout events from other tabs
-    const handleStorageChange = (e) => {
+    const handleStorageChange = (e: StorageEvent) => {
       if (e.key === "yolel_auth_token" && !e.newValue) {
         setIsAuthenticated(false);
       }
@@ -60,8 +64,11 @@ export const ProtectedRoute = ({ children }) => {
 
   // Role-based access control for sub admin
   if (role === "SUB_ADMIN") {
-    const isAllowed = location.pathname === "/reports";
-    
+    const allowedPaths = ["/reports", "/admin-images"];
+    const isAllowed =
+      allowedPaths.some((path) => location.pathname === path) ||
+      location.pathname.startsWith("/admin-images/");
+
     if (!isAllowed) {
       return <Navigate to="/reports" replace />;
     }
@@ -70,7 +77,7 @@ export const ProtectedRoute = ({ children }) => {
   return children;
 };
 
-export const PublicRoute = ({ children }) => {
+export const PublicRoute = ({ children }: RouteProps) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const user = getUserData();
