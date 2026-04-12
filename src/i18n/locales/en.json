@@ -124,7 +124,8 @@
     "showingXofY": "Showing {{count}} of {{total}} options",
     "noOptionsFound": "No options found",
     "scrollToLoadMore": "Scroll to load more...",
-    "selectDateRange": "Select Date Range"
+    "selectDateRange": "Select Date Range",
+    "system": "System"
   },
   "dashboard": {
     "title": "System Overview",

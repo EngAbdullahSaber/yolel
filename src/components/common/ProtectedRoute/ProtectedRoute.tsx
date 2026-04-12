@@ -53,9 +53,10 @@ export const ProtectedRoute = ({ children }: RouteProps) => {
 
   // Role-based access control for merchants
   if (role === "MERCHANT") {
-    const allowedPaths = ["/promo-codes", "/promo-codes/create"];
-    const isAllowed = allowedPaths.some(path => location.pathname === path) || 
-                      location.pathname.startsWith("/promo-codes/edit/");
+    // Merchants can only access the list view, not create or edit
+    const isAllowed = location.pathname === "/promo-codes" || 
+                      location.pathname === "/profile" || 
+                      location.pathname === "/logout";
     
     if (!isAllowed) {
       return <Navigate to="/promo-codes" replace />;

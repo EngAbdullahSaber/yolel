@@ -95,17 +95,22 @@ export default function AdminSettings() {
           const userData = JSON.parse(userDataString);
           const storage = localStorage.getItem("user") ? localStorage : sessionStorage;
           
+          // Ensure we preserve the role and other important properties
+          // by explicitly carrying over all fields from the original user object
+          const originalUser = userData.user || userData.data?.user || userData;
+          
           const updatedUser = {
             ...userData,
+            email: data.email,
             user: {
-              ...(userData.user || {}),
+              ...originalUser,
               email: data.email,
             }
           };
           storage.setItem("user", JSON.stringify(updatedUser));
           
-          // Trigger storage event
-          window.dispatchEvent(new StorageEvent("storage", { key: "user" }));
+          // Dispatch a custom event because 'storage' event only fires for other tabs
+          window.dispatchEvent(new CustomEvent("user-updated"));
         }
 
         setTimeout(() => {

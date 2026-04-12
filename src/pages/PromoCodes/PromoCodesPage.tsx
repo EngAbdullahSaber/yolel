@@ -184,13 +184,15 @@ export default function PromoCodesPage() {
           </div>
 
           <div className="flex items-center gap-3">
-            <Link
-              to="/promo-codes/create"
-              className="flex items-center gap-2.5 px-6 py-3 bg-gradient-to-r from-emerald-600 to-teal-700 hover:from-emerald-700 hover:to-teal-800 text-white rounded-2xl font-bold shadow-lg shadow-emerald-500/20 transition-all duration-300 active:scale-95"
-            >
-              <Plus size={20} />
-              {t("common.create")}
-            </Link>
+            {!isMerchant && (
+              <Link
+                to="/promo-codes/create"
+                className="flex items-center gap-2.5 px-6 py-3 bg-gradient-to-r from-emerald-600 to-teal-700 hover:from-emerald-700 hover:to-teal-800 text-white rounded-2xl font-bold shadow-lg shadow-emerald-500/20 transition-all duration-300 active:scale-95"
+              >
+                <Plus size={20} />
+                {t("common.create")}
+              </Link>
+            )}
 
             <button
               onClick={() => refetch()}
@@ -308,18 +310,22 @@ export default function PromoCodesPage() {
                             >
                               <Copy size={20} />
                             </button>
-                            <Link 
-                              to={`/promo-codes/edit/${promo.id}`}
-                              className="p-2.5 bg-white dark:bg-slate-700 text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 rounded-xl shadow-sm hover:shadow-md transition-all active:scale-90"
-                            >
-                              <Pencil size={20} />
-                            </Link>
-                            <button 
-                              onClick={() => handleDeleteClick(promo)}
-                              className="p-2.5 bg-white dark:bg-slate-700 text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 rounded-xl shadow-sm hover:shadow-md transition-all active:scale-90"
-                            >
-                              <Trash2 size={20} />
-                            </button>
+                            {!isMerchant && (
+                              <>
+                                <Link 
+                                  to={`/promo-codes/edit/${promo.id}`}
+                                  className="p-2.5 bg-white dark:bg-slate-700 text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 rounded-xl shadow-sm hover:shadow-md transition-all active:scale-90"
+                                >
+                                  <Pencil size={20} />
+                                </Link>
+                                <button 
+                                  onClick={() => handleDeleteClick(promo)}
+                                  className="p-2.5 bg-white dark:bg-slate-700 text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 rounded-xl shadow-sm hover:shadow-md transition-all active:scale-90"
+                                >
+                                  <Trash2 size={20} />
+                                </button>
+                              </>
+                            )}
                           </div>
                         </div>
                       </div>
@@ -355,13 +361,15 @@ export default function PromoCodesPage() {
                                        <span>{t("promoCodes.table.usages")}: {promo._count?.usages || 0}</span>
                                    </div>
                                </div>
-                               <Link 
-                                 to={`/promo-codes/edit/${promo.id}`}
-                                 className="flex items-center gap-1 text-[11px] text-emerald-600 dark:text-emerald-400 font-black uppercase hover:underline"
-                               >
-                                 {t("common.edit")}
-                                 <ExternalLink size={12} />
-                               </Link>
+                               {!isMerchant && (
+                                 <Link 
+                                   to={`/promo-codes/edit/${promo.id}`}
+                                   className="flex items-center gap-1 text-[11px] text-emerald-600 dark:text-emerald-400 font-black uppercase hover:underline"
+                                 >
+                                   {t("common.edit")}
+                                   <ExternalLink size={12} />
+                                 </Link>
+                               )}
                            </div>
 
                            {promo.offerId && (

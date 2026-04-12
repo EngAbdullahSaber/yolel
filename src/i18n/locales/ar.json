@@ -124,7 +124,8 @@
     "showingXofY": "عرض {{count}} من أصل {{total}} خيارات",
     "noOptionsFound": "لم يتم العثور على خيارات",
     "scrollToLoadMore": "اسحب للأسفل لتحميل المزيد...",
-    "selectDateRange": "اختر نطاق التاريخ"
+    "selectDateRange": "اختر نطاق التاريخ",
+    "system": "النظام"
   },
   "dashboard": {
     "title": "نظرة عامة على النظام",

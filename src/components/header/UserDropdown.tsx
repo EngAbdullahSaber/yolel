@@ -93,10 +93,17 @@ export default function UserDropdown() {
       }
     };
 
+    // Custom event listener for same-tab updates
+    const handleCustomUpdate = () => {
+      loadUserData();
+    };
+
     window.addEventListener("storage", handleStorageChange);
+    window.addEventListener("user-updated", handleCustomUpdate);
 
     return () => {
       window.removeEventListener("storage", handleStorageChange);
+      window.removeEventListener("user-updated", handleCustomUpdate);
     };
   }, []);
 
