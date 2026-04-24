@@ -36,7 +36,15 @@ export default function CreateMerchantPage() {
     },
     onError: (error: any) => {
       console.error("Error creating merchant:", error);
-      toast.error(t("merchants.create.form.error") || "Failed to create merchant. Please try again.");
+      const apiError = error.response?.data;
+      
+      if (apiError?.code === 400 && (apiError?.message === "البريد الإلكتروني مستخدم بالفعل" || apiError?.error?.[0]?.field === "email")) {
+        toast.error(t("merchants.create.form.emailInUse") || "Email already in use");
+      } else if (apiError?.message) {
+        toast.error(apiError.message);
+      } else {
+        toast.error(t("merchants.create.form.error") || "Failed to create merchant. Please try again.");
+      }
     },
   });
 

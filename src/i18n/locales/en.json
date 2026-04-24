@@ -261,7 +261,8 @@
         "submit": "Create Merchant Account",
         "loading": "Creating Account...",
         "success": "Merchant account created successfully!",
-        "error": "Failed to create merchant account. Please try again."
+        "error": "Failed to create merchant account. Please try again.",
+        "emailInUse": "Email already in use"
       }
     },
     "messages": {
