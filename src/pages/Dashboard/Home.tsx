@@ -28,6 +28,7 @@ interface DashboardStats {
   users: number;
   images: ImageStats;
   votes: number;
+  voteInteractions: number;
   deletedImages: number;
   reports: number;
   userSubscriptions: number;
@@ -149,12 +150,18 @@ export default function Home() {
         </div>
 
         {/* Secondary Metrics */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
            <StatCard
             icon={<Trash2 size={24} />}
             label={t("dashboard.stats.deleted") || "Deleted Images"}
             value={stats.deletedImages}
             color="orange"
+          />
+          <StatCard
+            icon={<Activity size={24} />}
+            label={t("dashboard.stats.voteInteractions") || "Vote Interactions"}
+            value={stats.voteInteractions}
+            color="emerald"
           />
           <StatCard
             icon={<CreditCard size={24} />}

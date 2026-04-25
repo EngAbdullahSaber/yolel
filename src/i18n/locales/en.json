@@ -143,7 +143,8 @@
       "reports": "Content Reports",
       "deleted": "Deleted Content",
       "userSubscriptions": "User Subscriptions",
-      "promoCodes": "Active Promos"
+      "promoCodes": "Active Promos",
+      "voteInteractions": "Vote Interactions"
     },
     "charts": {
       "gender": "Gender Distribution",

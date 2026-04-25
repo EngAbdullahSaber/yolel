@@ -144,7 +144,8 @@
       "deleted": "المحتوى المحذوف",
       "userSubscriptions": "اشتراكات المستخدمين",
       "subscriptions": "الاشتراكات المميزة",
-      "promoCodes": "العروض النشطة"
+      "promoCodes": "العروض النشطة",
+      "voteInteractions": "عدد التفاعلات"
     },
     "charts": {
       "gender": "توزيع الجنسين",
